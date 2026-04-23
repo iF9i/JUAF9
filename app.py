@@ -1971,6 +1971,8 @@ if __name__ == "__main__":
     finally:
         s.close()
 
+    print("...")
+    
     print("=" * 52)
     print("🕋  نظام تنظيم الجوازات — v1.4")
     print("=" * 52)
@@ -1982,11 +1984,5 @@ if __name__ == "__main__":
     print("   موظف:  fagh  / 1234  (مثال)")
     print("\n⚠️  لا تغلق هذه النافذة أثناء العمل")
     print("=" * 52)
-    if __name__ == "__main__":
-    init_db()
-    migrate_json()
-    migrate_seq_codes()
-    os.makedirs(BACKUP_DIR, exist_ok=True)
-    threading.Thread(target=backup_scheduler, daemon=True).start()
-
+    
     app.run(host="0.0.0.0", port=5000)
