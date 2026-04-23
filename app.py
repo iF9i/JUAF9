@@ -1983,4 +1983,10 @@ if __name__ == "__main__":
     print("\n⚠️  لا تغلق هذه النافذة أثناء العمل")
     print("=" * 52)
     if __name__ == "__main__":
+    init_db()
+    migrate_json()
+    migrate_seq_codes()
+    os.makedirs(BACKUP_DIR, exist_ok=True)
+    threading.Thread(target=backup_scheduler, daemon=True).start()
+
     app.run(host="0.0.0.0", port=5000)
