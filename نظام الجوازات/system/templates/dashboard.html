@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>حالة المكتب</title>
+<style>
+:root{
+  --bg1:#0f172a;--bg2:#1e293b;--card:#ffffff;--ink:#0f172a;--muted:#64748b;
+  --blue:#1d4ed8;--green:#16a34a;--amber:#d97706;--track:#e2e8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,'Segoe UI',Tahoma,sans-serif;
+  min-height:100vh;color:#fff;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(85,164,255,.18), transparent 24%),
+    radial-gradient(circle at 88% 10%, rgba(120,255,214,.12), transparent 24%),
+    linear-gradient(160deg,#06111f 0%,#0b1930 42%,#050a14 100%);
+}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+.topbar{
+  display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  margin-bottom:24px
+}
+.title{font-size:34px;font-weight:800;letter-spacing:.3px}
+.sub{font-size:15px;color:#cbd5e1;margin-top:6px}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.sel,.btn{
+  border:none;border-radius:16px;padding:14px 18px;font-size:16px;font-weight:700
+}
+.sel{min-width:260px;background:#fff;color:#0f172a}
+.btn{background:#ffffff1a;color:#fff;cursor:pointer;border:1px solid #ffffff26}
+.theme-fab{
+  position:fixed;left:20px;bottom:20px;z-index:1200;width:54px;height:54px;border:none;
+  border-radius:999px;background:rgba(10,21,37,.72);color:#fff;cursor:pointer;font-size:22px;
+  box-shadow:0 18px 36px rgba(0,0,0,.24);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.18)
+}
+body[data-theme="day"]{
+  --bg1:#FEFCF5;--bg2:#FBF7EA;--card:#ffffff;--ink:#1C1208;--muted:#6B5733;--track:#EFE4C0;
+  background:
+    radial-gradient(circle at 14% 10%, rgba(220,185,80,.14), transparent 26%),
+    radial-gradient(circle at 84% 8%,  rgba(255,220,100,.10), transparent 24%),
+    linear-gradient(160deg,#FEFCF5 0%,#FBF7EA 42%,#FEFCF6 100%);
+  color:#1C1208
+}
+body[data-theme="day"] .btn{background:rgba(255,253,246,.94);color:#2A1A04;border-color:rgba(180,140,50,.22)}
+body[data-theme="day"] .sel{background:rgba(255,253,246,.96);color:#1C1208;border:1px solid rgba(180,140,50,.22)}
+body[data-theme="day"] .theme-fab{background:rgba(255,253,246,.90);color:#5A3E0A;border-color:rgba(180,140,50,.22)}
+body[data-theme="day"] .board{background:linear-gradient(180deg,rgba(255,253,246,.98) 0%,rgba(252,249,240,1) 100%);color:#1C1208}
+body[data-theme="day"] .sub{color:#6B5733}
+body[data-theme="day"] .meta,
+body[data-theme="day"] .foot{color:#9E8A63}
+body[data-theme="day"] .progress-card{background:#FBF5E0;border-color:#DEC87A}
+body[data-theme="day"] .progress-title{color:#5A3E0A}
+body[data-theme="day"] .progress-pct{color:#A8871E}
+.board{
+  background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+  border-radius:32px;padding:28px;box-shadow:0 24px 70px rgba(0,0,0,.28);color:var(--ink)
+}
+.group-name{font-size:42px;font-weight:900;margin-bottom:10px}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:24px;color:var(--muted);font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:24px}
+.stat{
+  border-radius:26px;padding:26px 24px;color:#fff;min-height:150px;
+  display:flex;flex-direction:column;justify-content:space-between
+}
+.stat small{font-size:20px;opacity:.92;font-weight:700}
+.stat strong{font-size:54px;line-height:1;font-weight:900}
+.blue{background:linear-gradient(135deg,#C9A84C,#A8871E)}
+.green{background:linear-gradient(135deg,#22c55e,#15803d)}
+.amber{background:linear-gradient(135deg,#f59e0b,#b45309)}
+.slate{background:linear-gradient(135deg,#475569,#1e293b)}
+.rose{background:linear-gradient(135deg,#ef4444,#b91c1c)}
+.progress-card{
+  background:#eff6ff;border-radius:28px;padding:28px;border:1px solid #bfdbfe
+}
+.progress-head{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
+.progress-title{font-size:28px;font-weight:900;color:#5A3E0A}
+.progress-pct{font-size:48px;font-weight:900;color:#C9A84C}
+.track{height:34px;border-radius:999px;background:var(--track);overflow:hidden}
+.bar{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#C9A84C 0%,#22c55e 100%);
+  transition:width .45s ease
+}
+.foot{margin-top:18px;color:var(--muted);font-size:15px;font-weight:700}
+.empty{
+  padding:80px 20px;text-align:center;font-size:22px;font-weight:800;color:#475569
+}
+@media (max-width: 820px){
+  .wrap{padding:14px}
+  .title{font-size:26px}
+  .group-name{font-size:30px}
+  .stats{grid-template-columns:1fr}
+  .stat{min-height:130px}
+  .stat strong{font-size:42px}
+  .progress-title{font-size:22px}
+  .progress-pct{font-size:38px}
+  .sel{min-width:100%}
+}
+</style>
+</head>
+<body>
+<button class="theme-fab" id="theme-fab" onclick="toggleTheme()" title="تبديل الثيم"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg></button>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <div class="title">لوحة حالة المكتب</div>
+      <div class="sub" id="dash-sub">تحديث تلقائي كل 15 ثانية</div>
+    </div>
+    <div class="actions">
+      <select id="gid" class="sel" style="display:none" onchange="loadDash()"></select>
+      <button class="btn" onclick="location.reload()">تحديث الآن</button>
+      <button class="btn" onclick="location.href='/'">العودة للنظام</button>
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <div class="empty">جاري تحميل البيانات...</div>
+  </div>
+</div>
+
+<script>
+var role=''; var sessionGid=''; var queryGid='';
+const THEME_KEY='ui-theme';
+
+function applyTheme(theme){
+  document.body.setAttribute('data-theme', theme);
+  var btn=document.getElementById('theme-fab');
+  if(btn) btn.innerHTML=theme==='day'
+    ?'<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>'
+    :'<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>';
+}
+
+function initTheme(){
+  applyTheme(localStorage.getItem(THEME_KEY)||'night');
+}
+
+function toggleTheme(){
+  var next=(document.body.getAttribute('data-theme')||'night')==='day'?'night':'day';
+  localStorage.setItem(THEME_KEY,next);
+  applyTheme(next);
+}
+
+function pct(v){
+  var n=Math.max(0,Math.min(100,Number(v)||0));
+  return n+'%';
+}
+
+async function init(){
+  initTheme();
+  var sp=new URLSearchParams(location.search);
+  queryGid=sp.get('gid')||'';
+  var s=await fetch('/api/session').then(r=>r.json()).catch(()=>({ok:false}));
+  if(!s.ok){location.href='/';return;}
+  role=s.role; sessionGid=s.gid||'';
+  if(role==='admin'){
+    var gd=await fetch('/api/public/groups').then(r=>r.json()).catch(()=>({ok:false,groups:[]}));
+    var sel=document.getElementById('gid');
+    sel.style.display='';
+    sel.innerHTML='<option value="">جميع القروبات</option>'+(gd.groups||[]).map(function(g){
+      return '<option value="'+g.id+'">'+g.name+'</option>';
+    }).join('');
+    if(queryGid){sel.value=queryGid;}
+    else{sel.value='';}
+  }
+  loadDash();
+  setInterval(loadDash,15000);
+}
+
+async function loadDash(){
+  var gid = role==='admin'
+    ? (document.getElementById('gid').value || queryGid || '')
+    : sessionGid;
+  var url='/api/stats'+(gid?'?gid='+encodeURIComponent(gid):'');
+  var r=await fetch(url).then(x=>x.json()).catch(()=>({ok:false,msg:'تعذر تحميل البيانات'}));
+  var board=document.getElementById('board');
+  if(!r.ok){
+    board.innerHTML='<div class="empty">'+(r.msg||'تعذر تحميل البيانات')+'</div>';
+    return;
+  }
+  var total=Number(r.total||0);
+  var active=Number(r.active||0);
+  var departed=Number(r.departed||0);
+  var inactive=Number(r.inactive||0);
+  var pending=Number(r.pending||0);
+  var progress=Number(r.progress||0);
+  var groupName=r.group_name || (role==='admin' ? 'جميع القروبات' : 'مجموعتي');
+  document.getElementById('dash-sub').textContent='آخر تحديث: '+new Date().toLocaleTimeString('ar-SA');
+  board.innerHTML=
+    '<div class="group-name">المجموعة: '+groupName+'</div>'+
+    '<div class="meta"><span>إجمالي الحالة الحالية للمجموعة</span><span>جاهز للعرض على شاشة كبيرة أو تابلت</span></div>'+
+    '<div class="stats">'+
+      '<div class="stat blue"><small>إجمالي</small><strong>'+total+'</strong></div>'+
+      '<div class="stat green"><small>مفعّل</small><strong>'+active+'</strong></div>'+
+      '<div class="stat rose"><small>غير مفعّل</small><strong>'+inactive+'</strong></div>'+
+      '<div class="stat amber"><small>غادر</small><strong>'+departed+'</strong></div>'+
+      '<div class="stat slate"><small>المتبقي</small><strong>'+pending+'</strong></div>'+
+    '</div>'+
+    '<div class="progress-card">'+
+      '<div class="progress-head"><div class="progress-title">نسبة المغادرة</div><div class="progress-pct">'+progress+'%</div></div>'+
+      '<div class="track"><div class="bar" style="width:'+pct(progress)+'"></div></div>'+
+      '<div class="foot">المتبقي: '+pending+' من أصل '+total+'</div>'+
+    '</div>';
+}
+
+init();
+</script>
+</body>
+</html>

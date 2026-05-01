@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>وضع الإدخال السريع</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bgA:#06111f;--bgB:#0b1930;--bgC:#050a14;--card:rgba(11,22,39,.62);--card2:rgba(17,33,57,.48);
+  --text:#eef4ff;--muted:#96a9c2;--accent:#81d4ff;--accent2:#56bdf5;--border:rgba(160,196,255,.18);
+  --ok:#22c55e;--err:#ef4444;--glass:blur(18px) saturate(140%)
+}
+body{
+  font-family:-apple-system,'Segoe UI',Tahoma,sans-serif;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(85,164,255,.18), transparent 24%),
+    radial-gradient(circle at 88% 10%, rgba(120,255,214,.12), transparent 24%),
+    linear-gradient(160deg,var(--bgA) 0%,var(--bgB) 42%,var(--bgC) 100%);
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;direction:rtl;
+  gap:0;padding:20px;
+}
+.card{
+  background:var(--card);border-radius:28px;
+  box-shadow:0 24px 60px rgba(0,0,0,.28),0 1px 4px rgba(0,0,0,.06);
+  padding:40px 36px 32px;width:min(480px,100%);
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border)
+}
+.badge{
+  background:rgba(129,212,255,.12);color:#dff6ff;
+  font-size:13px;font-weight:600;padding:5px 14px;
+  border-radius:20px;letter-spacing:.3px;
+}
+h1{font-size:22px;font-weight:700;color:var(--text);margin-top:-4px}
+.grp-sel{
+  width:100%;padding:10px 14px;font-size:15px;
+  border:1.5px solid var(--border);border-radius:14px;
+  background:rgba(7,17,31,.42);color:var(--text);cursor:pointer;outline:none;
+  transition:border-color .2s;
+}
+.grp-sel:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(129,212,255,.12)}
+#pp{
+  width:100%;font-size:30px;padding:16px 18px;
+  border:1.5px solid var(--border);border-radius:18px;
+  text-align:center;letter-spacing:4px;outline:none;
+  font-weight:700;color:var(--text);background:rgba(7,17,31,.42);
+  transition:border-color .2s,box-shadow .2s,background .15s;
+  caret-color:var(--accent);
+}
+#pp::placeholder{letter-spacing:1px;font-weight:400;color:var(--muted);font-size:18px}
+#pp:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(129,212,255,.12);background:rgba(255,255,255,.04)}
+#pp.err{border-color:var(--err);box-shadow:0 0 0 4px rgba(239,68,68,.14);animation:shake .35s}
+#pp.ok{border-color:var(--ok);box-shadow:0 0 0 4px rgba(34,197,94,.14)}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-8px)}
+  40%,80%{transform:translateX(8px)}
+}
+.msg{
+  min-height:42px;width:100%;text-align:center;
+  font-size:17px;font-weight:700;padding:8px 16px;
+  border-radius:12px;transition:opacity .25s;opacity:0;
+}
+.msg.show{opacity:1}
+.msg.ok{color:#b7f7cd;background:rgba(20,83,45,.28)}
+.msg.err{color:#ffc0cb;background:rgba(127,29,29,.28)}
+.counter{
+  font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px;
+}
+.counter span{
+  background:rgba(129,212,255,.12);color:#dff6ff;font-weight:700;font-size:16px;
+  padding:2px 12px;border-radius:10px;min-width:36px;text-align:center;
+}
+.toggle-row{display:flex;align-items:center;gap:12px;padding:10px 16px;
+  background:var(--card2);border-radius:14px;border:1.5px solid var(--border);width:100%}
+.toggle-label{font-size:14px;font-weight:600;color:#dff6ff;flex:1;text-align:right}
+.toggle-label.off{color:var(--muted)}
+.toggle-switch{position:relative;width:48px;height:26px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:rgba(148,163,184,.4);border-radius:13px;
+  cursor:pointer;transition:background .2s}
+.toggle-track:before{content:'';position:absolute;width:20px;height:20px;
+  border-radius:50%;background:#fff;left:3px;top:3px;
+  transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input:checked+.toggle-track{background:var(--accent2)}
+input:checked+.toggle-track:before{transform:translateX(22px)}
+.toggle-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:8px;
+  min-width:52px;text-align:center}
+.toggle-badge.on{background:rgba(129,212,255,.12);color:#dff6ff}
+.toggle-badge.off{background:rgba(148,163,184,.16);color:var(--muted)}
+.back-btn{
+  margin-top:4px;color:var(--muted);font-size:13px;text-decoration:none;
+  padding:8px 14px;border-radius:999px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);cursor:pointer;transition:all .15s;
+}
+.back-btn:hover{background:rgba(129,212,255,.10);color:#dff6ff;border-color:rgba(129,212,255,.24)}
+.hint{font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+.notes-wrap{width:100%;display:flex;flex-direction:column;gap:10px}
+.notes-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.notes-label{font-size:13px;font-weight:700;color:var(--muted)}
+.attach-btn{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);border-radius:999px;padding:7px 12px;cursor:pointer}
+.attach-btn:hover{background:rgba(129,212,255,.10)}
+#scan-notes{width:100%;min-height:82px;resize:vertical;padding:12px 14px;border:1.5px solid var(--border);border-radius:16px;background:rgba(7,17,31,.42);color:var(--text);outline:none;font:inherit}
+#scan-notes:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(129,212,255,.12)}
+#scan-notes::placeholder{color:var(--muted)}
+.attach-meta{font-size:12px;color:var(--muted);text-align:right;width:100%}
+.theme-fab{
+  position:fixed;left:20px;bottom:20px;z-index:1200;width:54px;height:54px;border:none;
+  border-radius:999px;background:rgba(10,21,37,.72);color:var(--text);cursor:pointer;
+  box-shadow:0 18px 36px rgba(0,0,0,.24);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+  border:1px solid var(--border);font-size:22px
+}
+body[data-theme="day"]{
+  --bgA:#FEFCF5;--bgB:#FBF7EA;--bgC:#FEFCF6;--card:rgba(255,253,246,.88);--card2:rgba(252,249,240,.92);
+  --text:#1C1208;--muted:#6B5733;--accent:#C9A84C;--accent2:#A8871E;--border:rgba(180,140,50,.20)
+}
+body[data-theme="day"] .theme-fab{background:rgba(255,253,246,.90);color:#5A3E0A}
+body[data-theme="day"] .card{background:rgba(255,253,246,.92);border-color:rgba(180,140,50,.18)}
+body[data-theme="day"] .grp-sel,
+body[data-theme="day"] #pp{background:rgba(255,253,246,.96);color:#1C1208;border-color:rgba(180,140,50,.24)}
+body[data-theme="day"] .toggle-row{background:rgba(252,248,236,.96);border-color:rgba(180,140,50,.20)}
+body[data-theme="day"] .badge{background:rgba(201,168,76,.14);color:#7A5810}
+body[data-theme="day"] .counter,
+body[data-theme="day"] .hint,
+body[data-theme="day"] .toggle-label.off{color:#9E8A63}
+body[data-theme="day"] .counter span{background:rgba(201,168,76,.14);color:#7A5810}
+body[data-theme="day"] .back-btn{background:rgba(255,253,246,.92);color:#6B5733;border-color:rgba(180,140,50,.22)}
+body[data-theme="day"] .attach-btn,
+body[data-theme="day"] #scan-notes{background:rgba(255,253,246,.96);color:#1C1208;border-color:rgba(180,140,50,.22)}
+</style>
+</head>
+<body>
+<button class="theme-fab" id="theme-fab" onclick="toggleTheme()" title="تبديل الثيم"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg></button>
+<div class="card">
+  <div class="badge" id="mode-badge">وضع الإدخال السريع</div>
+  <h1 id="title">جاري التحميل…</h1>
+
+  <select id="grp-sel" class="grp-sel" style="display:none" onchange="onGroupChange()">
+    <option value="">— اختر المجموعة —</option>
+  </select>
+
+  <input id="pp" type="text" autocomplete="off" autocorrect="off"
+         autocapitalize="characters" spellcheck="false"
+         placeholder="رقم الجواز" maxlength="9"
+         oninput="onInput()" onkeydown="onKey(event)">
+
+  <div class="notes-wrap" id="scan-notes-wrap">
+    <div class="notes-head">
+      <span class="notes-label">ملاحظة</span>
+      <div>
+        <input type="file" id="scan-file" accept="image/*,application/pdf" style="display:none" onchange="attachScanFile(event)">
+        <button type="button" class="attach-btn" onclick="document.getElementById('scan-file').click()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:14px;height:14px;vertical-align:middle;margin-left:4px"><path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"/></svg> إرفاق ملف</button>
+      </div>
+    </div>
+    <textarea id="scan-notes" placeholder="أي ملاحظة..."></textarea>
+    <div class="attach-meta" id="scan-file-meta"></div>
+  </div>
+
+  <div class="msg" id="msg"></div>
+
+  <div class="toggle-row" id="activate-row">
+    <span class="toggle-label off" id="tgl-lbl">بدون تفعيل</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="tgl" onchange="onToggle()">
+      <span class="toggle-track"></span>
+    </label>
+    <span class="toggle-badge off" id="tgl-badge">إيقاف</span>
+  </div>
+
+  <div class="counter" id="session-counter">
+    <span id="cnt">0</span>
+    جواز تمت إضافته هذه الجلسة
+  </div>
+
+  <a href="/" class="back-btn">← العودة للرئيسية</a>
+  <p class="hint" id="scan-hint">اضغط Enter أو المسح الضوئي مباشرة للإضافة</p>
+</div>
+
+<script>
+var role='', gid='', cnt=0, msgTimer=null, autoActivate=false, mode='add', scanPendingFile=null;
+const THEME_KEY='ui-theme';
+
+function applyTheme(theme){
+  document.body.setAttribute('data-theme', theme);
+  var btn=document.getElementById('theme-fab');
+  if(btn) btn.innerHTML=theme==='day'
+    ?'<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>'
+    :'<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>';
+}
+
+function initTheme(){
+  applyTheme(localStorage.getItem(THEME_KEY)||'night');
+}
+
+function toggleTheme(){
+  var next=(document.body.getAttribute('data-theme')||'night')==='day'?'night':'day';
+  localStorage.setItem(THEME_KEY,next);
+  applyTheme(next);
+}
+
+function isDepartMode(){
+  return mode==='depart';
+}
+
+function setScanModeUI(){
+  var badge=document.getElementById('mode-badge');
+  var title=document.getElementById('title');
+  var hint=document.getElementById('scan-hint');
+  var activateRow=document.getElementById('activate-row');
+  var counter=document.getElementById('session-counter');
+  var notesWrap=document.getElementById('scan-notes-wrap');
+  if(isDepartMode()){
+    badge.textContent='وضع المغادرة السريع';
+    title.textContent='جاري التحميل…';
+    hint.textContent='امسح الجواز ثم اضغط Enter لتسجيل المغادرة فورًا';
+    activateRow.style.display='none';
+    notesWrap.style.display='none';
+    counter.innerHTML='<span id="cnt">0</span> جواز تم تسجيل مغادرته هذه الجلسة';
+  } else {
+    badge.textContent='وضع الإدخال السريع';
+    title.textContent='جاري التحميل…';
+    hint.textContent='اضغط Enter أو المسح الضوئي مباشرة للإضافة';
+    activateRow.style.display='';
+    notesWrap.style.display='';
+    counter.innerHTML='<span id="cnt">0</span> جواز تمت إضافته هذه الجلسة';
+  }
+}
+
+function attachScanFile(event){
+  var file=event.target.files && event.target.files[0];
+  if(!file) return;
+  var allowed=file.type.startsWith('image/') || file.type==='application/pdf';
+  if(!allowed){
+    showMsg('يسمح فقط بالصور أو PDF','err',true);
+    event.target.value='';
+    return;
+  }
+  var reader=new FileReader();
+  reader.onload=function(){
+    var data=reader.result.split(',')[1];
+    scanPendingFile={name:file.name,mime:file.type,data:data};
+    document.getElementById('scan-file-meta').textContent='تم إرفاق: '+file.name;
+    event.target.value='';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function init(){
+  try{
+    initTheme();
+    var qs=new URLSearchParams(location.search);
+    mode=qs.get('mode')==='depart'?'depart':'add';
+    setScanModeUI();
+    var r=await fetch('/api/session');
+    var d=await r.json();
+    if(!d.ok){location.href='/';return;}
+    role=d.role; gid=d.gid||'';
+    var gr=await fetch('/api/public/groups');
+    var gd=await gr.json();
+    var groups=gd.groups||[];
+    if(role==='admin'){
+      document.getElementById('title').textContent=isDepartMode()?'وضع المغادرة السريع':'وضع الإدخال السريع';
+      var sel=document.getElementById('grp-sel');
+      if(isDepartMode()){
+        sel.style.display='none';
+      } else {
+        sel.style.display='';
+        groups.forEach(function(g){
+          var o=document.createElement('option');
+          o.value=g.id; o.textContent=g.name;
+          sel.appendChild(o);
+        });
+      }
+    } else {
+      var grpObj=groups.find(function(g){return g.id===gid;});
+      document.getElementById('title').textContent=grpObj?grpObj.name:(isDepartMode()?'وضع المغادرة السريع':'وضع الإدخال السريع');
+    }
+    document.getElementById('pp').focus();
+  }catch(e){location.href='/';}
+}
+
+function onGroupChange(){
+  gid=document.getElementById('grp-sel').value;
+  document.getElementById('pp').focus();
+}
+
+  function onInput(){
+    var el=document.getElementById('pp');
+    el.value=el.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  el.classList.remove('err','ok');
+  clearMsg();
+}
+
+function onKey(e){
+  if(e.key==='Enter'){ e.preventDefault(); submit(); }
+}
+
+function onToggle(){
+  autoActivate=document.getElementById('tgl').checked;
+  var lbl=document.getElementById('tgl-lbl');
+  var badge=document.getElementById('tgl-badge');
+  if(autoActivate){
+    lbl.textContent='تفعيل تلقائي'; lbl.className='toggle-label';
+    badge.textContent='تشغيل'; badge.className='toggle-badge on';
+  } else {
+    lbl.textContent='بدون تفعيل'; lbl.className='toggle-label off';
+    badge.textContent='إيقاف'; badge.className='toggle-badge off';
+  }
+}
+
+function beep(freq,dur,type){
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=type||'sine'; o.frequency.value=freq;
+    g.gain.setValueAtTime(.3,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+dur/1000);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime+dur/1000);
+  }catch(e){}
+}
+
+function showMsg(txt,type,autoClear){
+  var el=document.getElementById('msg');
+  if(msgTimer){clearTimeout(msgTimer);msgTimer=null;}
+  el.textContent=txt; el.className='msg '+type+' show';
+  if(autoClear){
+    msgTimer=setTimeout(function(){
+      el.className='msg'; el.textContent='';
+      msgTimer=null;
+    },autoClear===true?4500:autoClear);
+  }
+}
+
+function clearMsg(){
+  if(msgTimer){clearTimeout(msgTimer);msgTimer=null;}
+  var el=document.getElementById('msg');
+    el.className='msg'; el.textContent='';
+  }
+
+async function submit(){
+  var el=document.getElementById('pp');
+  var val=el.value.trim().toUpperCase();
+  if(!val) return;
+
+  if(role==='admin' && !isDepartMode() && !gid){
+    showMsg('اختر المجموعة أولاً','err',false);
+    document.getElementById('grp-sel').focus();
+    return;
+  }
+
+  if(!/^[A-Z]{2}[0-9]{7}$/.test(val)){
+    el.classList.add('err');
+    showMsg('صيغة غير صحيحة — حرفان + 7 أرقام (مثال: AB1234567)','err',false);
+    beep(200,150,'square');
+    return;
+  }
+
+  var body={passport:val};
+  var endpoint='/api/depart';
+  if(!isDepartMode()){
+    body.status=autoActivate?'مفعل':'غير مفعل';
+    body.notes=document.getElementById('scan-notes').value.trim();
+    if(role==='admin') body.gid=gid;
+    endpoint='/api/add';
+  }
+
+  try{
+    var r=await fetch(endpoint,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    var d=await r.json();
+    if(d.unauth){location.href='/';return;}
+    if(d.ok){
+      el.classList.remove('err'); el.classList.add('ok');
+      var lbl;
+      if(isDepartMode()){
+        lbl='تم تسجيل المغادرة';
+        if(d.departed_at) lbl+=' — '+d.departed_at;
+      } else {
+        lbl=d.restored?'استُعيد':(autoActivate?'✓ مفعّل':'✓ تمت الإضافة');
+        if(d.seq_code) lbl+=' — الرقم: '+d.seq_code;
+      }
+      showMsg(lbl,'ok',isDepartMode()?true:60000);
+      beep(880,80);
+      cnt++; document.getElementById('cnt').textContent=cnt;
+      var addedPassport=val;
+      el.value='';
+      if(!isDepartMode()){
+        document.getElementById('scan-notes').value='';
+        document.getElementById('scan-file-meta').textContent='';
+        if(scanPendingFile){
+          var pf=scanPendingFile; scanPendingFile=null;
+          fetch('/api/attachments/add',{method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({passport:addedPassport,filename:pf.name,mime:pf.mime,data:pf.data})});
+        }
+      }
+      setTimeout(function(){el.classList.remove('ok');},600);
+    } else {
+      el.classList.add('err');
+      showMsg(d.msg||'خطأ غير محدد','err',false);
+      beep(200,150,'square');
+    }
+  }catch(e){
+    el.classList.add('err');
+    showMsg('تعذّر الاتصال بالخادم','err',false);
+    beep(200,150,'square');
+  }
+  el.focus();
+}
+
+init();
+</script>
+</body>
+</html>

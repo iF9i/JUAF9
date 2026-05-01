@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل التشغيل والاستخدام — نظام الجوازات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #07111f;
+    --navy2: #09111f;
+    --navy-card: rgba(14,25,43,0.64);
+    --accent: #81d4ff;
+    --accent2: #2563A8;
+    --text: #eef4ff;
+    --text2: #adc2df;
+    --green: #34d399;
+    --red: #fb7185;
+    --yellow: #fbbf24;
+    --border: rgba(160,196,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1C1208;
+    direction: rtl;
+  }
+
+  /* ═══════════════════════ PRINT STYLES ═══════════════════════ */
+  @media print {
+    body { background: white; }
+    .page { 
+      page-break-after: always;
+      box-shadow: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
+    .page:last-child { page-break-after: avoid; }
+    @page { size: A4; margin: 20mm 25mm; }
+    .print-btn { display: none !important; }
+    .nav-sidebar { display: none !important; }
+    .page-wrapper { margin-right: 0 !important; }
+  }
+
+  /* ═══════════════════════ SCREEN NAV ═══════════════════════ */
+  .nav-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 240px;
+    height: 100vh;
+    background: var(--navy);
+    padding: 20px 12px;
+    overflow-y: auto;
+    z-index: 100;
+    border-left: 1px solid var(--border);
+  }
+
+  .nav-sidebar::-webkit-scrollbar { width: 4px; }
+  .nav-sidebar::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .nav-item {
+    display: block;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 12px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    margin-bottom: 2px;
+    transition: all 0.2s;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .nav-item:hover { background: rgba(129,212,255,0.1); color: var(--accent); }
+  .nav-item.active { background: rgba(129,212,255,0.15); color: var(--accent); }
+  .nav-chapter { font-weight: 700; font-size: 11px; color: var(--accent); margin: 12px 0 4px; padding: 0 10px; }
+
+  .page-wrapper { margin-right: 240px; padding: 20px; }
+
+  .print-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, var(--accent2), #1a4a8a);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(37,99,168,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+  }
+  .print-btn:hover { transform: translateY(-2px); }
+
+  /* ═══════════════════════ PAGES ═══════════════════════ */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    margin: 0 auto 24px;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ═══════════════════════ COVER PAGE ═══════════════════════ */
+  .cover {
+    background: linear-gradient(170deg, #07111f 0%, #0d1d35 50%, #07111f 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 297mm;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(129,212,255,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(37,99,168,0.08) 0%, transparent 50%);
+  }
+
+  .cover-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+      linear-gradient(rgba(129,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(129,212,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .cover-content { position: relative; z-index: 2; }
+
+  .cover-badge {
+    display: inline-block;
+    background: rgba(129,212,255,0.12);
+    border: 1px solid rgba(129,212,255,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 900;
+    color: #eef4ff;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 20px rgba(129,212,255,0.2);
+  }
+
+  .cover h2 {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--accent);
+    margin-bottom: 40px;
+  }
+
+  .cover-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 32px auto;
+  }
+
+  .cover-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .cover-meta-item {
+    color: var(--text2);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cover-meta-item strong { color: var(--text); font-weight: 600; }
+
+  .cover-version {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .cover-version span {
+    color: rgba(173,194,223,0.5);
+    font-size: 11px;
+  }
+
+  .cover-dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 32px;
+    justify-content: center;
+  }
+
+  .cover-dots span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(129,212,255,0.3);
+  }
+  .cover-dots span:nth-child(2) { background: rgba(129,212,255,0.6); }
+  .cover-dots span:nth-child(3) { background: var(--accent); }
+
+  /* ═══════════════════════ PASSPORT LOGO SVG ═══════════════════════ */
+  .passport-logo { margin: 24px auto; }
+
+  /* ═══════════════════════ PAGE HEADER (inner pages) ═══════════════════════ */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 28px;
+    border-bottom: 1px solid #e8eef5;
+    background: #fafcff;
+  }
+
+  .page-header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .page-header-chapter {
+    color: #adc2df;
+    font-size: 11px;
+  }
+
+  /* ═══════════════════════ PAGE FOOTER ═══════════════════════ */
+  .page-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #e8eef5;
+    background: #fafcff;
+  }
+
+  .page-footer-text { color: #adc2df; font-size: 10px; }
+  .page-num { 
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    background: #EFF6FF;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ═══════════════════════ PAGE CONTENT ═══════════════════════ */
+  .page-content {
+    padding: 28px 36px;
+    padding-bottom: 60px;
+  }
+
+  /* ═══════════════════════ CHAPTER HEADER ═══════════════════════ */
+  .chapter-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #0d1d35 100%);
+    padding: 28px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chapter-header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 0% 50%, rgba(129,212,255,0.1) 0%, transparent 60%);
+  }
+
+  .chapter-num {
+    color: rgba(129,212,255,0.5);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 6px;
+  }
+
+  .chapter-title {
+    color: #eef4ff;
+    font-size: 26px;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .chapter-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(129,212,255,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 1px solid rgba(129,212,255,0.2);
+  }
+
+  /* ═══════════════════════ TOC ═══════════════════════ */
+  .toc-page { min-height: 297mm; }
+
+  .toc-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #0d1d35 100%);
+    padding: 32px 36px;
+    position: relative;
+  }
+
+  .toc-title {
+    color: var(--accent);
+    font-size: 28px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    gap: 12px;
+  }
+
+  .toc-item:last-child { border-bottom: none; }
+
+  .toc-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .toc-chapter-num {
+    background: var(--navy);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .toc-chapter-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1C1208;
+  }
+
+  .toc-page-num {
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .toc-dots {
+    flex: 1;
+    border-bottom: 2px dotted #c8d8e8;
+    margin: 0 8px;
+    max-width: 80px;
+  }
+
+  /* ═══════════════════════ CONTENT ELEMENTS ═══════════════════════ */
+  h2.section-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--accent2);
+    margin: 24px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #EFF6FF;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  h2.section-title::before {
+    content: '';
+    width: 4px;
+    height: 18px;
+    background: var(--accent2);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  h3.subsection {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2563A8;
+    margin: 16px 0 8px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #2d3748;
+    margin-bottom: 10px;
+  }
+
+  /* ═══════════════════════ BOXES ═══════════════════════ */
+  .box {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 12.5px;
+    line-height: 1.8;
+  }
+
+  .box-info {
+    background: #EFF6FF;
+    border: 1px solid rgba(129,212,255,0.5);
+    border-right: 4px solid var(--accent);
+    color: #1e3a5f;
+  }
+
+  .box-warn {
+    background: #fff3cd;
+    border: 1px solid rgba(251,191,36,0.5);
+    border-right: 4px solid var(--yellow);
+    color: #7a4f00;
+  }
+
+  .box-danger {
+    background: #FEE2E2;
+    border: 1px solid rgba(251,113,133,0.5);
+    border-right: 4px solid var(--red);
+    color: #7f1d1d;
+  }
+
+  .box-success {
+    background: #DCFCE7;
+    border: 1px solid rgba(52,211,153,0.5);
+    border-right: 4px solid var(--green);
+    color: #14532d;
+  }
+
+  .box-title {
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ═══════════════════════ STEPS ═══════════════════════ */
+  .steps { margin: 14px 0; }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    background: linear-gradient(135deg, var(--accent2), #1a4a8a);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .step-content { flex: 1; padding-top: 5px; }
+  .step-content strong { font-size: 13px; color: #1C1208; font-weight: 700; }
+  .step-content p { font-size: 12px; color: #4a5568; margin: 2px 0 0; line-height: 1.6; }
+
+  /* ═══════════════════════ LISTS ═══════════════════════ */
+  ul.styled, ol.styled {
+    padding-right: 20px;
+    margin: 10px 0;
+  }
+
+  ul.styled li, ol.styled li {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #2d3748;
+    margin-bottom: 4px;
+    position: relative;
+  }
+
+  ul.styled li::marker { color: var(--accent2); }
+
+  /* ═══════════════════════ TABLE ═══════════════════════ */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin: 14px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+
+  .data-table thead tr {
+    background: var(--navy);
+    color: var(--accent);
+  }
+
+  .data-table th {
+    padding: 10px 14px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .data-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e8eef5;
+    color: #2d3748;
+    vertical-align: top;
+  }
+
+  .data-table tbody tr:nth-child(even) { background: #f7faff; }
+  .data-table tbody tr:hover { background: #EFF6FF; }
+
+  /* ═══════════════════════ BADGES ═══════════════════════ */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .badge-green { background: #DCFCE7; color: #166534; }
+  .badge-red { background: #FEE2E2; color: #991b1b; }
+  .badge-blue { background: #EFF6FF; color: #1e40af; }
+  .badge-yellow { background: #fff3cd; color: #92400e; }
+
+  /* ═══════════════════════ CODE/MONO ═══════════════════════ */
+  code {
+    font-family: 'Courier New', monospace;
+    background: #f0f4f8;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #2563A8;
+    border: 1px solid #e2e8f0;
+    direction: ltr;
+    display: inline-block;
+  }
+
+  .code-block {
+    background: var(--navy);
+    color: var(--accent);
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    direction: ltr;
+    text-align: left;
+    margin: 12px 0;
+    border: 1px solid rgba(129,212,255,0.2);
+  }
+
+  /* ═══════════════════════ UI MOCKUP ═══════════════════════ */
+  .ui-mockup {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    border: 1px solid rgba(129,212,255,0.15);
+  }
+
+  .ui-mockup-bar {
+    background: rgba(129,212,255,0.08);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    border: 1px solid rgba(129,212,255,0.1);
+  }
+
+  .ui-mockup-bar span { color: var(--text2); font-size: 11px; }
+  .ui-mockup-bar strong { color: var(--accent); font-size: 12px; }
+
+  .ui-stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .ui-stat-card {
+    background: rgba(14,25,43,0.8);
+    border: 1px solid rgba(129,212,255,0.12);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .ui-stat-card .num { 
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 800;
+    display: block;
+  }
+  .ui-stat-card .lbl { color: var(--text2); font-size: 10px; }
+
+  .ui-search-bar {
+    background: rgba(14,25,43,0.6);
+    border: 1px solid rgba(129,212,255,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text2);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .ui-btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ui-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .ui-btn-p { 
+    background: linear-gradient(135deg, #81d4ff, #5bb8e8);
+    color: #07111f;
+  }
+
+  .ui-btn-warn {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #07111f;
+  }
+
+  .ui-btn-err {
+    background: linear-gradient(135deg, #fb7185, #e11d48);
+    color: white;
+  }
+
+  .ui-btn-ghost {
+    background: rgba(129,212,255,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(129,212,255,0.2);
+  }
+
+  /* ═══════════════════════ TWO-COL GRID ═══════════════════════ */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 14px 0;
+  }
+
+  /* ═══════════════════════ KEYWORD INDEX ═══════════════════════ */
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .index-item {
+    padding: 7px 10px;
+    border-bottom: 1px solid #e8eef5;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .index-item:nth-child(3n+1) { border-right: 1px solid #e8eef5; }
+  .index-item:nth-child(3n+2) { border-right: 1px solid #e8eef5; }
+
+  .index-word { color: #1C1208; font-weight: 600; }
+  .index-page { color: var(--accent2); font-size: 11px; }
+
+  /* ═══════════════════════ FILE PATH ═══════════════════════ */
+  .filepath {
+    font-family: 'Courier New', monospace;
+    background: #f0f4f8;
+    border: 1px solid #e2e8f0;
+    border-right: 3px solid var(--accent2);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #2563A8;
+    direction: ltr;
+    text-align: left;
+    margin: 6px 0;
+    display: block;
+  }
+
+  .section-break { 
+    height: 1px; 
+    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    margin: 20px 0; 
+  }
+
+  .highlight { 
+    background: rgba(129,212,255,0.15);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  /* ═══════════════════════ Q&A ═══════════════════════ */
+  .qa-item {
+    border: 1px solid #e8eef5;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .qa-q {
+    background: #EFF6FF;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e3a5f;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .qa-q::before {
+    content: 'س';
+    background: var(--accent2);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .qa-a {
+    background: white;
+    padding: 10px 16px;
+    font-size: 12.5px;
+    color: #2d3748;
+    line-height: 1.8;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .qa-a::before {
+    content: 'ج';
+    background: #DCFCE7;
+    color: #166534;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* CONTACT PAGE */
+  .contact-card {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 16px 0;
+    border: 1px solid rgba(129,212,255,0.15);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .contact-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(129,212,255,0.1);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    border: 1px solid rgba(129,212,255,0.2);
+    flex-shrink: 0;
+  }
+
+  .contact-info strong {
+    color: var(--accent);
+    font-size: 15px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .contact-info span {
+    color: var(--text2);
+    font-size: 12px;
+    display: block;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║                    NAVIGATION SIDEBAR                    ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<nav class="nav-sidebar">
+  <div class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 200 280" fill="none">
+      <rect x="20" y="10" width="160" height="260" rx="18" fill="#1e3a5f" stroke="#81d4ff" stroke-width="4"/>
+      <rect x="20" y="10" width="12" height="260" rx="6" fill="#81d4ff" opacity="0.6"/>
+      <line x1="55" y1="55" x2="160" y2="55" stroke="#81d4ff" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+      <line x1="55" y1="70" x2="140" y2="70" stroke="#81d4ff" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+      <circle cx="110" cy="130" r="34" stroke="#81d4ff" stroke-width="3" fill="none" opacity="0.7"/>
+      <line x1="110" y1="100" x2="110" y2="84" stroke="#81d4ff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="110" y1="160" x2="110" y2="176" stroke="#81d4ff" stroke-width="3" stroke-linecap="round"/>
+      <line x1="140" y1="130" x2="156" y2="130" stroke="#81d4ff" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="80" y1="130" x2="64" y2="130" stroke="#81d4ff" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <polygon points="110,100 115,115 110,112 105,115" fill="#81d4ff"/>
+      <line x1="55" y1="210" x2="160" y2="210" stroke="#81d4ff" stroke-width="2" opacity="0.4"/>
+      <line x1="55" y1="222" x2="160" y2="222" stroke="#81d4ff" stroke-width="2" opacity="0.3"/>
+      <line x1="55" y1="234" x2="130" y2="234" stroke="#81d4ff" stroke-width="2" opacity="0.2"/>
+    </svg>
+    <span>دليل الاستخدام<br>نظام الجوازات</span>
+  </div>
+  <a href="#cover" class="nav-item active">◆ الغلاف</a>
+  <a href="#toc" class="nav-item">◆ فهرس المحتويات</a>
+  <div class="nav-chapter">الفصول</div>
+  <a href="#ch1" class="nav-item">١ — متطلبات التثبيت</a>
+  <a href="#ch2" class="nav-item">٢ — تشغيل النظام</a>
+  <a href="#ch3" class="nav-item">٣ — تسجيل الدخول</a>
+  <a href="#ch4" class="nav-item">٤ — واجهة الموظف</a>
+  <a href="#ch5" class="nav-item">٥ — الإدخال السريع</a>
+  <a href="#ch6" class="nav-item">٦ — المغادرة الجماعية</a>
+  <a href="#ch7" class="nav-item">٧ — إدارة الرحلات</a>
+  <a href="#ch8" class="nav-item">٨ — واجهة المشرف</a>
+  <a href="#ch9" class="nav-item">٩ — الإعدادات والنسخ</a>
+  <a href="#ch10" class="nav-item">١٠ — الأسئلة الشائعة</a>
+  <div class="nav-chapter">الملاحق</div>
+  <a href="#index" class="nav-item">◇ الفهرس الأبجدي</a>
+  <a href="#contact" class="nav-item">◇ الدعم والتواصل</a>
+</nav>
+
+<div class="page-wrapper">
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║                      COVER PAGE                          ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="cover">
+  <div class="cover">
+    <div class="cover-grid"></div>
+    <div class="cover-content">
+      <div class="cover-badge">الإصدار الرسمي — 2026</div>
+
+      <!-- Passport Logo -->
+      <svg class="passport-logo" width="130" height="182" viewBox="0 0 200 280" fill="none">
+        <rect x="20" y="10" width="160" height="260" rx="18" fill="#1e3a5f" stroke="#81d4ff" stroke-width="4"/>
+        <rect x="20" y="10" width="14" height="260" rx="7" fill="#81d4ff" opacity="0.7"/>
+        <rect x="20" y="10" width="7" height="260" rx="3.5" fill="#81d4ff" opacity="0.4"/>
+        <!-- Header lines -->
+        <line x1="50" y1="50" x2="165" y2="50" stroke="#81d4ff" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+        <line x1="50" y1="65" x2="145" y2="65" stroke="#81d4ff" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+        <!-- Compass circle -->
+        <circle cx="110" cy="138" r="40" stroke="#81d4ff" stroke-width="3" fill="rgba(129,212,255,0.05)" opacity="0.8"/>
+        <circle cx="110" cy="138" r="3" fill="#81d4ff"/>
+        <!-- N arrow -->
+        <line x1="110" y1="138" x2="110" y2="104" stroke="#81d4ff" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="110,97 115,112 110,108 105,112" fill="#81d4ff"/>
+        <!-- S arrow -->
+        <line x1="110" y1="138" x2="110" y2="172" stroke="#81d4ff" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+        <polygon points="110,178 115,163 110,167 105,163" fill="#81d4ff" opacity="0.5"/>
+        <!-- E arrow -->
+        <line x1="110" y1="138" x2="144" y2="138" stroke="#adc2df" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <!-- W arrow -->
+        <line x1="110" y1="138" x2="76" y2="138" stroke="#adc2df" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <!-- MRZ lines -->
+        <line x1="40" y1="215" x2="170" y2="215" stroke="#81d4ff" stroke-width="2.5" opacity="0.45"/>
+        <line x1="40" y1="228" x2="170" y2="228" stroke="#81d4ff" stroke-width="2.5" opacity="0.35"/>
+        <line x1="40" y1="241" x2="150" y2="241" stroke="#81d4ff" stroke-width="2" opacity="0.25"/>
+      </svg>
+
+      <h1>دليل التشغيل والاستخدام</h1>
+      <h2>نظام الجوازات — إصدار 2026</h2>
+
+      <div class="cover-divider"></div>
+
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <span>المطوّر:</span>
+          <strong>فيصل الدباسي</strong>
+        </div>
+        <div class="cover-meta-item">
+          <span>جميع الحقوق محفوظة</span>
+          <strong>© 2026</strong>
+        </div>
+        <div class="cover-meta-item">
+          <span>الرابط الافتراضي:</span>
+          <strong style="font-family:monospace;letter-spacing:0.5px">http://127.0.0.1:5000</strong>
+        </div>
+      </div>
+
+      <div class="cover-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="cover-version">
+      <span>نظام إدارة جوازات الحجاج</span>
+      <span>·</span>
+      <span>يعمل محلياً عبر المتصفح</span>
+      <span>·</span>
+      <span>Windows 10+</span>
+    </div>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║                   TABLE OF CONTENTS                      ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page toc-page" id="toc">
+  <div class="toc-header">
+    <div class="toc-title">
+      <span style="background:rgba(129,212,255,0.15);border:1px solid rgba(129,212,255,0.3);border-radius:10px;padding:8px 12px;font-size:22px;">☰</span>
+      فهرس المحتويات
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل الأول</span>
+        <span class="toc-chapter-title">متطلبات التشغيل والتثبيت</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٣</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل الثاني</span>
+        <span class="toc-chapter-title">تشغيل النظام ومراقبه</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٥</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل الثالث</span>
+        <span class="toc-chapter-title">شاشة تسجيل الدخول</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٧</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل الرابع</span>
+        <span class="toc-chapter-title">واجهة الموظف</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٩</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل الخامس</span>
+        <span class="toc-chapter-title">الإدخال السريع وأوضاع العمل</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">١٢</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل السادس</span>
+        <span class="toc-chapter-title">المغادرة الجماعية</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">١٥</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل السابع</span>
+        <span class="toc-chapter-title">إدارة الرحلات</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">١٧</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل الثامن</span>
+        <span class="toc-chapter-title">واجهة المشرف</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٢٠</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل التاسع</span>
+        <span class="toc-chapter-title">الإعدادات والنسخ الاحتياطي</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٢٥</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num">الفصل العاشر</span>
+        <span class="toc-chapter-title">الأسئلة الشائعة والمشاكل الشائعة</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٢٩</span>
+    </div>
+    <div class="toc-item" style="border-top:2px solid #e2e8f0;margin-top:8px;padding-top:14px;">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num" style="background:#f0f4f8;color:#4a5568;">ملحق أ</span>
+        <span class="toc-chapter-title">الفهرس الأبجدي للمصطلحات</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٣٢</span>
+    </div>
+    <div class="toc-item">
+      <div class="toc-item-left">
+        <span class="toc-chapter-num" style="background:#f0f4f8;color:#4a5568;">ملحق ب</span>
+        <span class="toc-chapter-title">معلومات الاتصال والدعم</span>
+      </div>
+      <div class="toc-dots"></div>
+      <span class="toc-page-num">٣٤</span>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">نظام الجوازات — فيصل الدباسي © 2026</span>
+    <span class="page-num">٢</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 1 — متطلبات التثبيت                   ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل الأول</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">⚙️</div>
+      متطلبات التشغيل والتثبيت
+    </div>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">متطلبات النظام</h2>
+    <table class="data-table">
+      <thead><tr><th>المكوّن</th><th>المتطلب</th><th>ملاحظة</th></tr></thead>
+      <tbody>
+        <tr><td><strong>نظام التشغيل</strong></td><td>Windows 10 أو أحدث</td><td>64-bit مستحسن</td></tr>
+        <tr><td><strong>Python</strong></td><td>إصدار 3.10 أو أحدث</td><td>يجب إضافته لـ PATH</td></tr>
+        <tr><td><strong>المتصفح</strong></td><td>Chrome / Edge / Firefox</td><td>أحدث إصدار مفضّل</td></tr>
+        <tr><td><strong>الإنترنت</strong></td><td>غير مطلوب بعد التثبيت</td><td>مطلوب عند أول تثبيت</td></tr>
+        <tr><td><strong>المساحة</strong></td><td>500 ميغابايت على الأقل</td><td>تزداد مع المرفقات</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box box-warn">
+      <div class="box-title">⚠️ تنبيه مهم</div>
+      عند تثبيت Python، تأكد من تفعيل خيار <strong>"Add Python to PATH"</strong> في الشاشة الأولى من المثبّت. إذا نسيت ذلك، أعد تثبيت Python أو أضفه يدوياً لمتغيرات النظام.
+    </div>
+
+    <h2 class="section-title">المكتبات المثبتة تلقائياً</h2>
+    <table class="data-table">
+      <thead><tr><th>المكتبة</th><th>الإصدار</th><th>الوظيفة</th></tr></thead>
+      <tbody>
+        <tr><td><code>Flask</code></td><td>3.1.3</td><td>إطار عمل خادم الويب</td></tr>
+        <tr><td><code>openpyxl</code></td><td>3.1.5</td><td>قراءة وكتابة ملفات Excel</td></tr>
+        <tr><td><code>Werkzeug</code></td><td>3.1.8</td><td>أدوات معالجة طلبات الويب</td></tr>
+        <tr><td><code>Jinja2</code></td><td>3.1.6</td><td>محرك القوالب</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">خطوات التثبيت</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-content">
+          <strong>تثبيت Python</strong>
+          <p>حمّل Python من <code>python.org</code> وتأكد من تفعيل "Add Python to PATH" أثناء التثبيت.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-content">
+          <strong>تشغيل ملف التثبيت</strong>
+          <p>انقر مرتين على <code>تثبيت النظام.bat</code> الموجود في مجلد النظام.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-content">
+          <strong>التثبيت من مجلد libs</strong>
+          <p>سيحاول النظام أولاً تثبيت المكتبات من مجلد <code>libs</code> المحلي بدون إنترنت.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <div class="step-content">
+          <strong>التثبيت من الإنترنت (إذا لزم)</strong>
+          <p>إذا لم يوجد مجلد libs، يُثبَّت تلقائياً من الإنترنت. تأكد من الاتصال.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٥</div>
+        <div class="step-content">
+          <strong>انتظر رسالة النجاح</strong>
+          <p>انتظر ظهور الرسالة: <code>Install completed successfully</code> قبل إغلاق النافذة.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box box-success">
+      <div class="box-title">✅ بعد التثبيت الناجح</div>
+      لا تحتاج لإعادة تشغيل <strong>تثبيت النظام.bat</strong> مرة أخرى. هذا الملف يُشغَّل مرة واحدة فقط. للتشغيل اليومي استخدم <strong>تشغيل النظام.bat</strong>.
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الأول — متطلبات التشغيل والتثبيت</span>
+    <span class="page-num">٣</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 2 — تشغيل النظام                      ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل الثاني</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">▶️</div>
+      تشغيل النظام
+    </div>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">طرق التشغيل الثلاث</h2>
+
+    <div class="two-col">
+      <div class="box box-success" style="height:fit-content">
+        <div class="box-title">🚀 تشغيل النظام.bat</div>
+        <strong>التشغيل الرسمي اليومي</strong>
+        <ul class="styled" style="margin-top:8px">
+          <li>يشغّل النظام في الخلفية بلا نافذة</li>
+          <li>يفتح المتصفح تلقائياً</li>
+          <li>يبدأ مراقب شريط المهام</li>
+          <li><strong>مناسب للاستخدام اليومي</strong></li>
+        </ul>
+      </div>
+      <div class="box box-info" style="height:fit-content">
+        <div class="box-title">🔧 تشغيل يدوي.bat</div>
+        <strong>للتشخيص والمشاكل</strong>
+        <ul class="styled" style="margin-top:8px">
+          <li>يفتح نافذة CMD مرئية</li>
+          <li>يعرض رسائل الخطأ مباشرة</li>
+          <li>يفتح المتصفح بعد ثانيتين</li>
+          <li><strong>مناسب عند وجود مشاكل</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="section-title">مراقب النظام (System Tray)</h2>
+    <p>بعد تشغيل النظام، ستظهر أيقونة المراقب في شريط المهام أسفل الشاشة:</p>
+
+    <!-- UI Mockup of system tray -->
+    <div class="ui-mockup">
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;background:rgba(14,25,43,0.9);padding:8px 16px;border-radius:8px;border:1px solid rgba(129,212,255,0.1)">
+        <span style="color:var(--text2);font-size:11px">12:30 م</span>
+        <span style="color:var(--text2);font-size:11px">📶 🔊</span>
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(52,211,153,0.15);padding:4px 10px;border-radius:6px;border:1px solid rgba(52,211,153,0.3)">
+          <div style="width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399"></div>
+          <span style="color:#34d399;font-size:11px;font-weight:700">نظام الجوازات</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="data-table" style="margin-top:12px">
+      <thead><tr><th>حالة الأيقونة</th><th>المعنى</th><th>الإجراء</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-green">● خضراء</span></td>
+          <td>النظام يعمل بشكل طبيعي</td>
+          <td>لا شيء مطلوب</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">● حمراء</span></td>
+          <td>النظام متوقف</td>
+          <td>انقر يمين ← فتح المتصفح أو إعادة التشغيل</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection">قائمة النقر بالزر الأيمن على المراقب</h3>
+    <ul class="styled">
+      <li><strong>فتح المتصفح</strong> — يفتح النظام في المتصفح الافتراضي</li>
+      <li><strong>إيقاف السيرفر</strong> — يوقف الخادم نهائياً</li>
+      <li><strong>إغلاق المراقب</strong> — يُغلق أيقونة المراقب فقط (الخادم يستمر)</li>
+    </ul>
+
+    <div class="box box-info">
+      <div class="box-title">ℹ️ آلية المراقبة</div>
+      المراقب يفحص حالة الخادم كل <strong>5 ثوانٍ</strong>، ويُظهر إشعاراً على الشاشة عند توقف الخادم أو استعادته تلقائياً.
+    </div>
+
+    <h2 class="section-title">إيقاف النظام</h2>
+    <table class="data-table">
+      <thead><tr><th>طريقة الإيقاف</th><th>الخطوات</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>من المراقب</td>
+          <td>نقر يمين على الأيقونة ← <strong>إيقاف السيرفر</strong></td>
+        </tr>
+        <tr>
+          <td>من الواجهة</td>
+          <td>الإعدادات ← <strong>إيقاف الخادم</strong></td>
+        </tr>
+        <tr>
+          <td>من التشغيل اليدوي</td>
+          <td>اضغط <code>CTRL+C</code> في نافذة CMD</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box box-warn">
+      <div class="box-title">⏱️ انتهاء الجلسة</div>
+      الجلسة تنتهي تلقائياً بعد <strong>8 ساعات</strong> من عدم النشاط. ستحتاج لإعادة تسجيل الدخول بعد انتهاء الجلسة. النظام يحفظ البيانات بشكل مستمر ولا يُفقد أي شيء.
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الثاني — تشغيل النظام</span>
+    <span class="page-num">٥</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 3 — تسجيل الدخول                      ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل الثالث</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">🔑</div>
+      شاشة تسجيل الدخول
+    </div>
+  </div>
+  <div class="page-content">
+
+    <p>تسجيل الدخول يتم على خطوتين: اختيار المجموعة أولاً، ثم إدخال بيانات الدخول.</p>
+
+    <h2 class="section-title">الخطوة الأولى — اختيار المجموعة</h2>
+
+    <!-- Login mockup step 1 -->
+    <div class="ui-mockup">
+      <div style="text-align:center;padding:8px 0 16px">
+        <div style="color:var(--accent);font-size:18px;font-weight:800;margin-bottom:4px">نظام الجوازات</div>
+        <div style="color:var(--text2);font-size:11px">اختر مجموعتك للمتابعة</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+        <div style="background:rgba(14,25,43,0.8);border:1px solid rgba(129,212,255,0.2);border-radius:10px;padding:12px;text-align:center;cursor:pointer">
+          <div style="font-size:20px;margin-bottom:4px">🏢</div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">فاغ</div>
+          <div style="color:var(--text2);font-size:10px">A · ٤٥ حاج</div>
+        </div>
+        <div style="background:rgba(129,212,255,0.15);border:2px solid var(--accent);border-radius:10px;padding:12px;text-align:center;cursor:pointer">
+          <div style="font-size:20px;margin-bottom:4px">✈️</div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">أمسا</div>
+          <div style="color:var(--text2);font-size:10px">B · ٦٢ حاج</div>
+        </div>
+        <div style="background:rgba(14,25,43,0.8);border:1px solid rgba(129,212,255,0.2);border-radius:10px;padding:12px;text-align:center;cursor:pointer">
+          <div style="font-size:20px;margin-bottom:4px">🌍</div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">كيوبا</div>
+          <div style="color:var(--text2);font-size:10px">C · ٣٨ حاج</div>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="display:inline-block;background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.3);border-radius:8px;padding:8px 20px;color:#fb7185;font-size:12px;font-weight:600">دخول المشرف</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">الخطوة الثانية — إدخال بيانات الدخول</h2>
+
+    <!-- Login mockup step 2 -->
+    <div class="ui-mockup">
+      <div style="max-width:280px;margin:0 auto">
+        <div style="color:var(--accent);font-size:14px;font-weight:800;text-align:center;margin-bottom:14px">تسجيل الدخول — أمسا</div>
+        <div style="background:rgba(14,25,43,0.8);border:1px solid rgba(129,212,255,0.2);border-radius:8px;padding:10px 14px;margin-bottom:8px">
+          <div style="color:var(--text2);font-size:10px;margin-bottom:4px">اسم المستخدم</div>
+          <div style="color:var(--text);font-size:13px">employee1</div>
+        </div>
+        <div style="background:rgba(14,25,43,0.8);border:1px solid rgba(129,212,255,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px">
+          <div style="color:var(--text2);font-size:10px;margin-bottom:4px">كلمة السر</div>
+          <div style="color:var(--text);font-size:13px">••••••••</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:linear-gradient(135deg,#81d4ff,#5bb8e8);color:#07111f;border-radius:8px;padding:9px;text-align:center;font-size:12px;font-weight:700">دخول</div>
+          <div style="background:rgba(129,212,255,0.08);border:1px solid rgba(129,212,255,0.2);color:var(--accent);border-radius:8px;padding:9px 14px;font-size:12px">رجوع</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">بيانات الدخول الافتراضية</h2>
+    <div class="box box-warn">
+      <div class="box-title">⚠️ بيانات المشرف الافتراضية — غيّرها فوراً</div>
+      <div style="display:flex;gap:24px;margin-top:8px">
+        <div><span style="color:#7a4f00">اسم المستخدم:</span> <code>admin</code></div>
+        <div><span style="color:#7a4f00">كلمة السر:</span> <code>••••••••</code></div>
+      </div>
+    </div>
+
+    <h2 class="section-title">ملاحظات مهمة</h2>
+    <div class="box box-info">
+      <div class="box-title">📌 فرق دخول الموظف والمشرف</div>
+      <ul class="styled" style="margin-top:6px">
+        <li><strong>الموظف:</strong> يختار مجموعته أولاً ← يدخل بيانات الدخول</li>
+        <li><strong>المشرف:</strong> يضغط "دخول المشرف" مباشرة دون اختيار مجموعة</li>
+        <li>كل موظف مرتبط بمجموعة واحدة فقط، لا يستطيع تغييرها بنفسه</li>
+        <li>الضغط على <code>Enter</code> يُنفّذ تسجيل الدخول مباشرة</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الثالث — شاشة تسجيل الدخول</span>
+    <span class="page-num">٧</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 4 — واجهة الموظف                      ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل الرابع</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">👤</div>
+      واجهة الموظف
+    </div>
+  </div>
+  <div class="page-content">
+
+    <!-- Employee UI Mockup -->
+    <div class="ui-mockup">
+      <!-- Navbar -->
+      <div class="ui-mockup-bar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="color:var(--accent);font-weight:700;font-size:13px">نظام الجوازات</span>
+          <span style="color:var(--border)">|</span>
+          <span style="color:var(--text2);font-size:11px">مجموعة أمسا</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="color:var(--text2);font-size:11px">موظف١</span>
+          <div style="width:28px;height:28px;background:rgba(129,212,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:13px">م</div>
+        </div>
+      </div>
+      <!-- Stats -->
+      <div class="ui-stat-cards">
+        <div class="ui-stat-card">
+          <span class="num">١٢٠</span>
+          <span class="lbl">الإجمالي</span>
+        </div>
+        <div class="ui-stat-card">
+          <span class="num" style="color:#34d399">٨٩</span>
+          <span class="lbl">مفعّل</span>
+        </div>
+        <div class="ui-stat-card">
+          <span class="num" style="color:#fbbf24">٢٥</span>
+          <span class="lbl">غادر</span>
+        </div>
+        <div class="ui-stat-card">
+          <span class="num" style="color:#fb7185">٦</span>
+          <span class="lbl">غير مفعّل</span>
+        </div>
+      </div>
+      <!-- Search -->
+      <div class="ui-search-bar">
+        <span>🔍</span>
+        <span>ادخل رقم الجواز... (مثال: AB1234567)</span>
+      </div>
+      <!-- Quick actions -->
+      <div class="ui-btn-row">
+        <span class="ui-btn ui-btn-ghost">📊 حالة المكتب</span>
+        <span class="ui-btn ui-btn-p">⚡ إدخال سريع</span>
+        <span class="ui-btn ui-btn-warn">🚪 مغادرة سريعة</span>
+        <span class="ui-btn ui-btn-ghost">📋 الجوازات</span>
+      </div>
+    </div>
+
+    <h2 class="section-title">بطاقات الإحصاءات</h2>
+    <table class="data-table">
+      <thead><tr><th>البطاقة</th><th>تعريفها</th><th>اللون</th></tr></thead>
+      <tbody>
+        <tr><td><strong>الإجمالي</strong></td><td>مجموع جميع جوازات المجموعة</td><td>أزرق</td></tr>
+        <tr><td><strong>مفعّل</strong></td><td>عدد الجوازات بحالة "مفعّل"</td><td><span class="badge badge-green">أخضر</span></td></tr>
+        <tr><td><strong>غادر</strong></td><td>عدد الجوازات المسجّلة مغادرة</td><td><span class="badge badge-yellow">أصفر</span></td></tr>
+        <tr><td><strong>غير مفعّل</strong></td><td>عدد الجوازات بحالة "غير مفعّل"</td><td><span class="badge badge-red">أحمر</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">البحث السريع عن جواز</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-content">
+          <strong>أدخل رقم الجواز</strong>
+          <p>في حقل البحث أعلى الصفحة. التنسيق: <span class="highlight">حرفان + 7 أرقام</span> مثال: <code>AB1234567</code></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-content">
+          <strong>اضغط Enter</strong>
+          <p>تظهر نتيجة البحث فوراً تحت حقل البحث.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-content">
+          <strong>راجع النتيجة</strong>
+          <p>تُعرض: رقم الجواز، رمز التسلسل، حالة نسك، حالة المغادرة، وشارة دبلوماسي إن وُجدت.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">الأزرار المتاحة عند نتيجة البحث</h2>
+    <table class="data-table">
+      <thead><tr><th>الزر</th><th>الوظيفة</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-blue">تعديل الحالة</span></td><td>تغيير حالة نسك بين مفعّل وغير مفعّل</td></tr>
+        <tr><td><span class="badge badge-yellow">تسجيل مغادرة</span></td><td>تسجيل مغادرة الجواز</td></tr>
+        <tr><td><span class="badge badge-blue">ملاحظات</span></td><td>إضافة/عرض ملاحظات أو مرفقات للجواز</td></tr>
+        <tr><td><span class="badge badge-red">حذف</span></td><td>حذف الجواز (للمشرف فقط)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box box-info">
+      <div class="box-title">🎖️ شارة دبلوماسي</div>
+      أي جواز يبدأ برقمه بـ <code>DA</code> (مثال: <code>DA1234567</code>) يُصنَّف تلقائياً كجواز دبلوماسي ويُعلَّم بشارة خاصة في الواجهة.
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الرابع — واجهة الموظف</span>
+    <span class="page-num">٩</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 5 — الإدخال السريع                    ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل الخامس</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">⚡</div>
+      الإدخال السريع وأوضاع العمل
+    </div>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">وضع الإدخال السريع</h2>
+    <p>واجهة مخصصة للإدخال المتواصل بسرعة عالية، مناسبة لقراءة الجوازات بجهاز Scanner أو الإدخال اليدوي.</p>
+    <p>الوصول: اضغط <strong>"إدخال سريع"</strong> من الواجهة الرئيسية، أو افتح الرابط مباشرة: <code>/scan</code></p>
+
+    <!-- Scan UI Mockup -->
+    <div class="ui-mockup">
+      <div style="text-align:center;padding:8px 0 12px">
+        <div style="color:var(--text2);font-size:11px;margin-bottom:4px">وضع الإدخال السريع</div>
+        <div style="background:rgba(14,25,43,0.8);border:2px solid rgba(52,211,153,0.5);border-radius:12px;padding:14px 20px;margin-bottom:10px;position:relative">
+          <div style="color:#34d399;font-size:28px;font-family:monospace;font-weight:700;letter-spacing:2px">AB1234567_</div>
+          <div style="position:absolute;top:8px;left:10px;color:var(--text2);font-size:10px">⌨️ اكتب رقم الجواز</div>
+        </div>
+        <div style="display:flex;justify-content:center;gap:20px">
+          <div style="text-align:center">
+            <div style="color:#34d399;font-size:32px;font-weight:900">٤٧</div>
+            <div style="color:var(--text2);font-size:10px">إجمالي الإدخال</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">ميزات الإدخال السريع</h2>
+    <table class="data-table">
+      <thead><tr><th>الميزة</th><th>التفاصيل</th></tr></thead>
+      <tbody>
+        <tr><td>حجم الخط</td><td>30px — لسهولة القراءة من بعيد</td></tr>
+        <tr><td>النجاح</td><td>الحقل يتحوّل <span class="badge badge-green">أخضر</span> لثانية</td></tr>
+        <tr><td>الخطأ</td><td>الحقل يتحوّل <span class="badge badge-red">أحمر</span> ويهتز</td></tr>
+        <tr><td>التركيز</td><td>يعود للحقل تلقائياً بعد كل عملية</td></tr>
+        <tr><td>العداد</td><td>يزداد مع كل إدخال ناجح</td></tr>
+        <tr><td>Scanner</td><td>متوافق تماماً مع أجهزة المسح الضوئي</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">وضع المغادرة السريعة</h2>
+    <p>نفس واجهة الإدخال السريع لكن بدلاً من إضافة جواز، يُسجَّل مغادرة.</p>
+    <p>الوصول: <code>/scan?mode=depart</code> أو من زر "مغادرة سريعة" في الواجهة.</p>
+
+    <div class="section-break"></div>
+
+    <h2 class="section-title">قواعد رقم الجواز</h2>
+    <div class="box box-info">
+      <div class="box-title">📝 التنسيق الصحيح لرقم الجواز</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-top:8px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:11px;color:#1e3a5f;margin-bottom:4px">التنسيق:</div>
+          <code style="font-size:16px;padding:6px 14px">XX0000000</code>
+        </div>
+        <div style="color:#1e3a5f;font-size:20px">→</div>
+        <div>
+          <div style="font-size:11px;color:#1e3a5f;margin-bottom:4px">حرفان إنجليزيان</div>
+          <code>AB</code> <code>DA</code> <code>XY</code>
+        </div>
+        <div style="color:#1e3a5f;font-size:20px">+</div>
+        <div>
+          <div style="font-size:11px;color:#1e3a5f;margin-bottom:4px">سبعة أرقام</div>
+          <code>1234567</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:12px">
+      <div class="box box-success">
+        <div class="box-title">✅ أمثلة صحيحة</div>
+        <code>AB1234567</code><br>
+        <code>DA9876543</code><br>
+        <code>XY0001234</code>
+      </div>
+      <div class="box box-danger">
+        <div class="box-title">❌ أمثلة خاطئة</div>
+        <code>A1234567</code> — حرف واحد فقط<br>
+        <code>AB123456</code> — 6 أرقام فقط<br>
+        <code>AB12345678</code> — 8 أرقام
+      </div>
+    </div>
+
+    <h2 class="section-title">نظام التسلسل</h2>
+    <p>كل جواز يحصل على رقم تسلسلي تلقائي داخل مجموعته يتكون من: <strong>بادئة المجموعة + رقم تسلسلي</strong></p>
+    <table class="data-table">
+      <thead><tr><th>المجموعة</th><th>البادئة</th><th>مثال على التسلسل</th></tr></thead>
+      <tbody>
+        <tr><td>فاغ</td><td><code>A</code></td><td>A-1، A-2، A-3...</td></tr>
+        <tr><td>أمسا</td><td><code>B</code></td><td>B-1، B-2، B-15...</td></tr>
+        <tr><td>كيوبا</td><td><code>C</code></td><td>C-1، C-2...</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box box-info">
+      <div class="box-title">🔢 الأرقام التسلسلية لا تُعاد</div>
+      حتى لو حُذف جواز برقم A-15، الجواز التالي سيكون A-16. الأرقام لا تُعاد استخدامها أبداً لضمان التتبع الدقيق.
+    </div>
+
+    <h2 class="section-title">الملاحظات والمرفقات</h2>
+    <ul class="styled">
+      <li>لكل جواز حقل ملاحظات نصي حر</li>
+      <li>يمكن إرفاق: <strong>صور، PDF، ملفات Word</strong></li>
+      <li>المرفقات تُحفظ على القرص في مجلد <code>system/uploads/</code></li>
+      <li>عرض المرفق يفتح في نافذة منبثقة داخل النظام</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الخامس — الإدخال السريع وأوضاع العمل</span>
+    <span class="page-num">١٢</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 6 — المغادرة الجماعية                 ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل السادس</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">🚪</div>
+      المغادرة الجماعية
+    </div>
+  </div>
+  <div class="page-content">
+
+    <p>تتيح هذه الميزة تسجيل مغادرة مجموعة كبيرة من الجوازات دفعة واحدة بسرعة وكفاءة.</p>
+
+    <h2 class="section-title">خطوات تسجيل المغادرة الجماعية</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-content">
+          <strong>فتح واجهة المغادرة الجماعية</strong>
+          <p>اضغط على زر <strong>"المغادرة السريعة"</strong> في الواجهة الرئيسية للموظف.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-content">
+          <strong>إدخال أرقام الجوازات</strong>
+          <p>يمكن إدخال الجوازات بطريقتين:</p>
+          <ul class="styled" style="margin-top:6px">
+            <li>إدخال رقم واحد والضغط <code>Enter</code></li>
+            <li>لصق قائمة أرقام دفعة واحدة مفصولة بـ: مسافة، فاصلة، أو سطر جديد</li>
+          </ul>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-content">
+          <strong>مراجعة قائمة الجوازات</strong>
+          <p>تظهر قائمة بحالة كل جواز قبل التأكيد.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <div class="step-content">
+          <strong>تأكيد المغادرة</strong>
+          <p>اضغط <strong>"تأكيد المغادرة"</strong> لتسجيل الكل دفعة واحدة.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk departure mockup -->
+    <div class="ui-mockup">
+      <div style="margin-bottom:10px">
+        <div style="color:var(--text2);font-size:11px;margin-bottom:8px">قائمة الجوازات (٤ جوازات)</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:8px;padding:8px 12px">
+            <span style="color:#eef4ff;font-family:monospace;font-size:12px">AB1234567</span>
+            <span style="color:var(--text2);font-size:11px">B-15</span>
+            <span style="background:#DCFCE7;color:#166534;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:700">جاهز</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:8px;padding:8px 12px">
+            <span style="color:#eef4ff;font-family:monospace;font-size:12px">XY9876543</span>
+            <span style="color:var(--text2);font-size:11px">B-22</span>
+            <span style="background:#DCFCE7;color:#166534;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:700">جاهز</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.3);border-radius:8px;padding:8px 12px">
+            <span style="color:#eef4ff;font-family:monospace;font-size:12px">CD1111111</span>
+            <span style="color:var(--text2);font-size:11px">—</span>
+            <span style="background:#FEE2E2;color:#991b1b;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:700">غادر مسبقاً</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:8px;padding:8px 12px">
+            <span style="color:#eef4ff;font-family:monospace;font-size:12px">EF5555555</span>
+            <span style="color:var(--text2);font-size:11px">B-31</span>
+            <span style="background:#DCFCE7;color:#166534;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:700">جاهز</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end">
+        <div class="ui-btn ui-btn-warn">🚪 تأكيد مغادرة ٣ جوازات</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">ملاحظات مهمة</h2>
+    <div class="box box-info">
+      <div class="box-title">ℹ️ تفاصيل عملية المغادرة الجماعية</div>
+      <ul class="styled" style="margin-top:6px">
+        <li>الجواز الذي <strong>غادر مسبقاً</strong> يُعرض باللون الأحمر ولا يُعاد تسجيله</li>
+        <li>جميع الجوازات المُؤكَّدة تحصل على نفس <strong>رقم الدفعة</strong></li>
+        <li>يمكن <strong>إلغاء مغادرة</strong> جواز معين لاحقاً من صفحة تفاصيله</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل السادس — المغادرة الجماعية</span>
+    <span class="page-num">١٥</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 7 — إدارة الرحلات                     ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch7">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل السابع</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">✈️</div>
+      إدارة الرحلات
+    </div>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">إنشاء رحلة جديدة</h2>
+    <p>من واجهة الموظف، اضغط <strong>"إدارة الرحلات"</strong> في الأسفل، ثم <strong>"إنشاء رحلة جديدة"</strong>.</p>
+
+    <table class="data-table">
+      <thead><tr><th>الحقل</th><th>الوصف</th><th>إلزامي</th></tr></thead>
+      <tbody>
+        <tr><td>تاريخ التقرير</td><td>تاريخ إنشاء الرحلة</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>المجموعة</td><td>للمشرف فقط — تحديد المجموعة</td><td><span class="badge badge-blue">مشرف</span></td></tr>
+        <tr><td>اسم الفندق</td><td>فندق إقامة الحجاج</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>رابط الموقع</td><td>رابط خرائط الفندق</td><td>اختياري</td></tr>
+        <tr><td>الجنسية</td><td>جنسية الحجاج</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>رقم الرحلة</td><td>رقم رحلة الطيران</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>الشركة الناقلة</td><td>اسم شركة الطيران</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>الوجهة</td><td>مطار الوصول</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>وقت الإقلاع</td><td>موعد إقلاع الطائرة</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>وقت وقوف الحافلة</td><td>موعد وصول الحافلة</td><td>اختياري</td></tr>
+        <tr><td>وقت مغادرة الحافلة</td><td>موعد انطلاق الحافلة</td><td>اختياري</td></tr>
+        <tr><td>إجمالي عدد الحجاج</td><td>العدد الكلي في هذه الرحلة</td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>عدد الحافلات</td><td>عدد الحافلات المخصصة</td><td>اختياري</td></tr>
+        <tr><td>رقم عقد السكن</td><td>رقم العقد مع الفندق</td><td>اختياري</td></tr>
+        <tr><td>رقم الاعتماد</td><td>رقم اعتماد المجموعة</td><td>اختياري</td></tr>
+        <tr><td>الملاحظات</td><td>أي ملاحظات إضافية</td><td>اختياري</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">ربط جوازات برحلة</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-content">
+          <strong>أنشئ الرحلة أولاً</strong>
+          <p>يجب حفظ بيانات الرحلة قبل ربط الجوازات بها.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-content">
+          <strong>اختر الرحلة في قسم "ربط حجاج برحلة"</strong>
+          <p>من القائمة المنسدلة، اختر الرحلة المطلوبة.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-content">
+          <strong>أدخل أرقام الجوازات</strong>
+          <p>مفصولة بفاصلة أو سطر جديد. مثال: <code>AB1234567, XY9876543</code></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <div class="step-content">
+          <strong>اضغط "ربط الجوازات"</strong>
+          <p>تُربط الجوازات بالرحلة فوراً.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">تأكيد مغادرة رحلة وتقرير Word</h2>
+    <div class="two-col">
+      <div class="box box-info">
+        <div class="box-title">✅ تأكيد المغادرة</div>
+        <ol class="styled" style="margin-top:6px">
+          <li>من قائمة الرحلات، اضغط على الرحلة</li>
+          <li>راجع قائمة الجوازات وحالاتهم</li>
+          <li>اضغط <strong>"تأكيد مغادرة الرحلة"</strong></li>
+          <li>يمكن التراجع لاحقاً من نفس القائمة</li>
+        </ol>
+      </div>
+      <div class="box box-success">
+        <div class="box-title">📄 تقرير Word</div>
+        <p style="margin-top:6px;font-size:12px">اضغط <strong>"تقرير Word"</strong> لتحميل ملف <code>.docx</code> يحتوي على:</p>
+        <ul class="styled" style="margin-top:4px">
+          <li>بيانات الرحلة الكاملة</li>
+          <li>قائمة الجوازات المرتبطة</li>
+          <li>معلومات الحجاج</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل السابع — إدارة الرحلات</span>
+    <span class="page-num">١٧</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 8 — واجهة المشرف                      ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch8">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل الثامن</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">🛡️</div>
+      واجهة المشرف
+    </div>
+  </div>
+  <div class="page-content">
+
+    <p>واجهة المشرف تحتوي على شريط جانبي بخمسة أقسام رئيسية.</p>
+
+    <!-- Admin sidebar mockup -->
+    <div class="ui-mockup" style="display:flex;gap:12px;padding:12px">
+      <div style="width:140px;background:rgba(7,17,31,0.8);border-radius:10px;padding:10px;border:1px solid rgba(129,212,255,0.12)">
+        <div style="color:var(--accent);font-size:11px;font-weight:700;padding:6px 8px;background:rgba(129,212,255,0.15);border-radius:7px;margin-bottom:4px">📊 لوحة التحكم</div>
+        <div style="color:var(--text2);font-size:11px;padding:6px 8px;border-radius:7px;margin-bottom:4px">📋 السجلات</div>
+        <div style="color:var(--text2);font-size:11px;padding:6px 8px;border-radius:7px;margin-bottom:4px">📈 الأداء</div>
+        <div style="color:var(--text2);font-size:11px;padding:6px 8px;border-radius:7px;margin-bottom:4px">📎 المرفقات</div>
+        <div style="color:var(--text2);font-size:11px;padding:6px 8px;border-radius:7px">⚙️ الإعدادات</div>
+      </div>
+      <div style="flex:1">
+        <div class="ui-stat-cards" style="margin-bottom:10px">
+          <div class="ui-stat-card"><span class="num">٥٤٢</span><span class="lbl">الإجمالي</span></div>
+          <div class="ui-stat-card"><span class="num" style="color:#34d399">٤٠١</span><span class="lbl">مفعّل</span></div>
+          <div class="ui-stat-card"><span class="num" style="color:#fbbf24">١١٢</span><span class="lbl">غادروا</span></div>
+          <div class="ui-stat-card"><span class="num" style="color:#fb7185">٢٩</span><span class="lbl">غير مفعّل</span></div>
+        </div>
+        <div class="ui-btn-row">
+          <span class="ui-btn ui-btn-p" style="font-size:10px">📥 تصدير Excel</span>
+          <span class="ui-btn ui-btn-ghost" style="font-size:10px">📊 حالة المكتب</span>
+          <span class="ui-btn ui-btn-warn" style="font-size:10px">📤 استيراد</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">١. لوحة التحكم</h2>
+
+    <h3 class="subsection">الإجراءات السريعة</h3>
+    <table class="data-table">
+      <thead><tr><th>الإجراء</th><th>الوظيفة</th></tr></thead>
+      <tbody>
+        <tr><td>طباعة تقرير اليوم</td><td>Excel مفرّق بالجوازات التي غادرت اليوم فقط</td></tr>
+        <tr><td>حالة المكتب</td><td>عرض إحصاءات كل مجموعة بشكل مرئي</td></tr>
+        <tr><td>تصدير كل الجوازات</td><td>Excel شامل لجميع الجوازات في جميع المجموعات</td></tr>
+        <tr><td>استيراد جماعي</td><td>رفع ملف Excel لاستيراد جوازات بالجملة</td></tr>
+        <tr><td>إدارة الرحلات</td><td>الوصول لجميع رحلات النظام</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">٢. السجلات (Logs)</h2>
+    <p>تتبع جميع العمليات التي أُجريت على النظام مع إمكانية الفلترة.</p>
+
+    <div class="two-col">
+      <div>
+        <h3 class="subsection">خيارات الفلترة</h3>
+        <ul class="styled">
+          <li>اسم المستخدم</li>
+          <li>رقم الجواز</li>
+          <li>نوع العملية</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="subsection">أنواع العمليات</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">
+          <span class="badge badge-green">إضافة</span>
+          <span class="badge badge-blue">تعديل</span>
+          <span class="badge badge-yellow">مغادرة</span>
+          <span class="badge badge-red">حذف</span>
+          <span class="badge badge-blue">دخول</span>
+          <span class="badge badge-blue">خروج</span>
+          <span class="badge badge-green">استيراد</span>
+          <span class="badge badge-yellow">إلغاء مغادرة</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">٣. الأداء</h2>
+    <p>ترتيب الموظفين حسب إنتاجيتهم خلال فترة زمنية محددة.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>الترتيب</th>
+          <th>الموظف</th>
+          <th>المجموعة</th>
+          <th>الإضافات</th>
+          <th>التعديلات</th>
+          <th>المغادرات</th>
+          <th>المجموع</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:center"><strong>🥇 ١</strong></td>
+          <td>موظف أ</td>
+          <td>فاغ</td>
+          <td style="color:#34d399;font-weight:700">٤٥</td>
+          <td>١٢</td>
+          <td>٣٠</td>
+          <td><strong>٨٧</strong></td>
+        </tr>
+        <tr>
+          <td style="text-align:center"><strong>🥈 ٢</strong></td>
+          <td>موظف ب</td>
+          <td>أمسا</td>
+          <td style="color:#34d399;font-weight:700">٣٨</td>
+          <td>٨</td>
+          <td>٢٥</td>
+          <td><strong>٧١</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px;color:#718096">الفترات المتاحة: اليوم / الأسبوع / الشهر</p>
+
+    <h2 class="section-title">٤. المرفقات</h2>
+    <p>قائمة بجميع الملفات المرفقة في النظام مع بيانات كل مرفق:</p>
+    <ul class="styled">
+      <li>رقم الجواز المرتبط</li>
+      <li>اسم الملف ونوعه</li>
+      <li>تاريخ الرفع</li>
+      <li>المجموعة</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الثامن — واجهة المشرف</span>
+    <span class="page-num">٢٠</span>
+  </div>
+</section>
+
+<!-- CHAPTER 8 continued — الإعدادات -->
+<section class="page">
+  <div class="page-header">
+    <div class="page-header-logo">
+      <svg width="18" height="18" viewBox="0 0 200 280" fill="none">
+        <rect x="20" y="10" width="160" height="260" rx="18" fill="#1e3a5f" stroke="#81d4ff" stroke-width="6"/>
+        <rect x="20" y="10" width="12" height="260" rx="6" fill="#81d4ff" opacity="0.6"/>
+        <circle cx="110" cy="145" r="30" stroke="#81d4ff" stroke-width="6" fill="none" opacity="0.7"/>
+        <polygon points="110,118 115,133 110,130 105,133" fill="#81d4ff"/>
+        <line x1="110" y1="145" x2="110" y2="116" stroke="#81d4ff" stroke-width="4"/>
+      </svg>
+      نظام الجوازات
+    </div>
+    <span class="page-header-chapter">الفصل الثامن — واجهة المشرف (تكملة)</span>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">٥. الإعدادات — ثلاثة تبويبات</h2>
+
+    <h3 class="subsection">أ) الإعدادات العامة</h3>
+
+    <table class="data-table">
+      <thead><tr><th>الوظيفة</th><th>التفاصيل</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>النسخ الاحتياطي الفوري</strong></td>
+          <td>اضغط "إنشاء نسخة الآن" — تُحفظ نسخة فورية في <code>system/backups/</code></td>
+        </tr>
+        <tr>
+          <td><strong>عرض النسخ السابقة</strong></td>
+          <td>قائمة بآخر 7 نسخ احتياطية</td>
+        </tr>
+        <tr>
+          <td><strong>النسخ التلقائي</strong></td>
+          <td>كل 6 ساعات تلقائياً</td>
+        </tr>
+        <tr>
+          <td><strong>إيقاف الخادم</strong></td>
+          <td>يوقف البرنامج نهائياً — استخدمه فقط عند الانتهاء</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box box-danger">
+      <div class="box-title">🚨 منطقة خطرة — بدء موسم جديد</div>
+      <p style="margin-top:6px;font-size:12px">هذا الخيار يحذف <strong>جميع الجوازات والمجموعات والسجلات</strong> نهائياً. لا يمكن التراجع.</p>
+      <ul class="styled" style="margin-top:6px">
+        <li>كلمة المرور المطلوبة: متاحة لدى المشرف المختص فقط</li>
+        <li>تُنشأ نسخة احتياطية تلقائية قبل الحذف</li>
+        <li><strong>تواصل مع المطوّر للحصول على الكلمة</strong></li>
+      </ul>
+    </div>
+
+    <h3 class="subsection">ب) إدارة المجموعات</h3>
+    <table class="data-table">
+      <thead><tr><th>الحقل</th><th>الوصف</th><th>ملاحظة</th></tr></thead>
+      <tbody>
+        <tr><td>معرّف المجموعة (ID)</td><td>بالإنجليزي</td><td>لا يتغير بعد الإنشاء</td></tr>
+        <tr><td>اسم المجموعة</td><td>بالعربي</td><td>يظهر في الواجهة</td></tr>
+        <tr><td>البادئة</td><td>حرف أو أكثر (A، B، AA)</td><td>يجب أن تكون فريدة</td></tr>
+        <tr><td>الأيقونة</td><td>اختيار من 12+ أيقونة</td><td>للتمييز البصري</td></tr>
+        <tr><td>اللون</td><td>اختيار من 12+ لون</td><td>للتمييز البصري</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box box-warn">
+      <div class="box-title">⚠️ حذف مجموعة</div>
+      عند حذف مجموعة يُطلب منك تحديد ما يحدث للموظفين المرتبطين (تعطيل أو حذف). جوازات المجموعة المحذوفة <strong>تبقى في قاعدة البيانات</strong> ولا تُحذف.
+    </div>
+
+    <h3 class="subsection">ج) إدارة المستخدمين</h3>
+    <table class="data-table">
+      <thead><tr><th>الحقل</th><th>للموظف</th><th>للمشرف</th></tr></thead>
+      <tbody>
+        <tr><td>اسم المستخدم</td><td colspan="2" style="text-align:center">لا يتغير بعد الإنشاء</td></tr>
+        <tr><td>كلمة السر</td><td colspan="2" style="text-align:center">اتركها فارغة للإبقاء على القديمة عند التعديل</td></tr>
+        <tr><td>الدور</td><td>موظف</td><td>مشرف</td></tr>
+        <tr><td>المجموعة</td><td>إلزامية</td><td>غير مطلوبة</td></tr>
+        <tr><td>الحالة</td><td colspan="2" style="text-align:center">مفعّل / معطّل</td></tr>
+      </tbody>
+    </table>
+
+    <div class="box box-info">
+      <div class="box-title">🔒 قيود الحذف</div>
+      <ul class="styled" style="margin-top:4px">
+        <li>لا يمكن حذف حساب <code>admin</code> (المشرف العام)</li>
+        <li>لا يمكن حذف حسابك الذي قمت بتسجيل الدخول به</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل الثامن — واجهة المشرف (تكملة)</span>
+    <span class="page-num">٢٣</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 9 — الإعدادات والنسخ الاحتياطي        ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch9">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل التاسع</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">💾</div>
+      الإعدادات والنسخ الاحتياطي
+    </div>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">ملفات النظام الهامة</h2>
+    <table class="data-table">
+      <thead><tr><th>الملف / المجلد</th><th>المسار</th><th>الوظيفة</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>passports.db</code></td>
+          <td><code>system/</code></td>
+          <td>قاعدة البيانات الرئيسية — الأهم</td>
+        </tr>
+        <tr>
+          <td><code>backups/</code></td>
+          <td><code>system/backups/</code></td>
+          <td>جميع النسخ الاحتياطية</td>
+        </tr>
+        <tr>
+          <td><code>uploads/</code></td>
+          <td><code>system/uploads/</code></td>
+          <td>المرفقات والملفات المرفوعة</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">سياسة النسخ الاحتياطي</h2>
+    <div class="two-col">
+      <div class="box box-success">
+        <div class="box-title">🔄 تلقائي</div>
+        <ul class="styled" style="margin-top:6px">
+          <li>كل <strong>6 ساعات</strong> تلقائياً</li>
+          <li>لا يتطلب أي إجراء</li>
+        </ul>
+      </div>
+      <div class="box box-info">
+        <div class="box-title">🖱️ يدوي</div>
+        <ul class="styled" style="margin-top:6px">
+          <li>من الإعدادات</li>
+          <li>اضغط "إنشاء نسخة الآن"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box box-warn">
+      <div class="box-title">📌 سياسة الاحتفاظ</div>
+      النظام يحتفظ بآخر <strong>7 نسخ احتياطية فقط</strong>. النسخ الأقدم تُحذف تلقائياً لتوفير المساحة. كل نسخة تشمل قاعدة البيانات ومجلد uploads.
+    </div>
+
+    <h2 class="section-title">استعادة النسخة الاحتياطية (يدوياً)</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-content">
+          <strong>أوقف الخادم</strong>
+          <p>من المراقب أو الإعدادات — يجب أن يكون الخادم متوقفاً تماماً.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-content">
+          <strong>احذف قاعدة البيانات الحالية</strong>
+          <p>احذف ملف <code>passports.db</code> من مجلد <code>system/</code></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-content">
+          <strong>انسخ النسخة الاحتياطية</strong>
+          <p>من مجلد <code>system/backups/</code> انسخ ملف <code>.db</code> المطلوب إلى <code>system/</code> وأعد تسميته إلى <code>passports.db</code></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <div class="step-content">
+          <strong>أعد تشغيل النظام</strong>
+          <p>شغّل <code>تشغيل النظام.bat</code> وتحقق من أن البيانات استُعيدت.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">التصدير والاستيراد — Excel</h2>
+
+    <h3 class="subsection">التصدير إلى Excel</h3>
+    <table class="data-table">
+      <thead><tr><th>نوع التصدير</th><th>المحتوى</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>تصدير مجموعة واحدة</td>
+          <td>ورقة عمل واحدة بجوازات المجموعة</td>
+        </tr>
+        <tr>
+          <td>تصدير كل المجموعات</td>
+          <td>ورقة ملخص + ورقة كل الجوازات + ورقة لكل مجموعة</td>
+        </tr>
+        <tr>
+          <td>تقرير اليوم</td>
+          <td>الجوازات التي غادرت اليوم فقط</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box box-info">
+      <div class="box-title">🎨 ألوان ملف Excel</div>
+      <div style="display:flex;gap:12px;margin-top:6px;flex-wrap:wrap">
+        <div><span class="badge badge-green">مفعّل</span> → أخضر</div>
+        <div><span class="badge badge-red">غير مفعّل</span> → أحمر</div>
+        <div><span class="badge badge-yellow">مغادر</span> → برتقالي</div>
+      </div>
+    </div>
+
+    <h3 class="subsection">الاستيراد من Excel</h3>
+    <table class="data-table">
+      <thead><tr><th>العمود</th><th>المحتوى</th><th>مثال</th><th>إلزامي</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>رقم الجواز</td><td><code>AB1234567</code></td><td><span class="badge badge-red">نعم</span></td></tr>
+        <tr><td>B</td><td>حالة نسك</td><td><code>مفعل</code> أو <code>غير مفعل</code></td><td>اختياري</td></tr>
+        <tr><td>C</td><td>ملاحظات</td><td>أي نص</td><td>اختياري</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#718096;margin-top:4px">* السطر الأول يُتجاهل إذا كان عنواناً.</p>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل التاسع — الإعدادات والنسخ الاحتياطي</span>
+    <span class="page-num">٢٥</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           CHAPTER 10 — الأسئلة الشائعة                  ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="ch10">
+  <div class="chapter-header">
+    <div class="chapter-num">الفصل العاشر</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">❓</div>
+      الأسئلة الشائعة والمشاكل
+    </div>
+  </div>
+  <div class="page-content">
+
+    <h2 class="section-title">الأسئلة الشائعة</h2>
+
+    <div class="qa-item">
+      <div class="qa-q">رقم الجواز مكرر — ماذا يعني؟</div>
+      <div class="qa-a">الجواز موجود مسبقاً في مجموعة ما. يظهر اسم المجموعة ورقمه. المشرف يستطيع نقله أو استعادته.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">كيف أنقل جواز من مجموعة لأخرى؟</div>
+      <div class="qa-a">ابحث عن الجواز كمشرف ← اضغط "نقل واستعادة" ← اختر المجموعة الجديدة ← تأكيد.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">الجواز محذوف — كيف أستعيده؟</div>
+      <div class="qa-a">المشرف فقط يرى المحذوفين من قائمة الجوازات (فلتر "محذوف"). بالإضافة مجدداً يُستعاد الجواز تلقائياً بجميع بياناته.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">النظام لا يستجيب عند التشغيل؟</div>
+      <div class="qa-a">استخدم <strong>تشغيل يدوي.bat</strong> لرؤية رسائل الخطأ في نافذة CMD، ثم شارك رسالة الخطأ مع الدعم التقني.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Python غير موجودة؟</div>
+      <div class="qa-a">ثبّت Python من <code>python.org</code>، وتأكد من تفعيل خيار "Add Python to PATH" في الشاشة الأولى من المثبّت.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">كيف أغير كلمة السر؟</div>
+      <div class="qa-a">المشرف → الإعدادات → المستخدمون → تعديل الحساب المطلوب → أدخل كلمة السر الجديدة → حفظ.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">ماذا يعني الجواز الدبلوماسي؟</div>
+      <div class="qa-a">الجوازات التي تبدأ بـ <code>DA</code> تُكتشف تلقائياً وتُعلَّم بشارة "دبلوماسي". المشرف يستطيع تعديل هذه العلامة يدوياً.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">هل يعمل النظام على أكثر من جهاز؟</div>
+      <div class="qa-a">النظام مصمم للعمل محلياً على جهاز واحد. يمكن الوصول له من أجهزة أخرى على نفس الشبكة عبر IP الجهاز المضيف.</div>
+    </div>
+
+    <h2 class="section-title">المشاكل الشائعة وحلولها</h2>
+    <table class="data-table">
+      <thead><tr><th>المشكلة</th><th>السبب</th><th>الحل</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-red">Port already in use</span></td>
+          <td>النظام يعمل مسبقاً</td>
+          <td>افتح المتصفح على <code>127.0.0.1:5000</code> مباشرة</td>
+        </tr>
+        <tr>
+          <td>المتصفح لا يفتح تلقائياً</td>
+          <td>بطء في بدء الخادم</td>
+          <td>افتح يدوياً <code>http://127.0.0.1:5000</code></td>
+        </tr>
+        <tr>
+          <td>الجواز رُفض</td>
+          <td>تنسيق خاطئ</td>
+          <td>تحقق: حرفان بالضبط + 7 أرقام بالضبط</td>
+        </tr>
+        <tr>
+          <td>نسيت كلمة السر</td>
+          <td>—</td>
+          <td>المشرف يعدّلها من إدارة المستخدمين</td>
+        </tr>
+        <tr>
+          <td>الجلسة انتهت</td>
+          <td>8 ساعات من عدم النشاط</td>
+          <td>أعد تسجيل الدخول — البيانات محفوظة</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">الفصل العاشر — الأسئلة الشائعة</span>
+    <span class="page-num">٢٩</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           APPENDIX A — الفهرس الأبجدي                   ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="index">
+  <div class="chapter-header">
+    <div class="chapter-num">ملحق أ</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">🔤</div>
+      الفهرس الأبجدي للمصطلحات
+    </div>
+  </div>
+  <div class="page-content">
+
+    <p style="margin-bottom:16px">قائمة المصطلحات التقنية المستخدمة في الدليل مرتبة أبجدياً مع رقم الصفحة.</p>
+
+    <div class="index-grid">
+      <div class="index-item"><span class="index-word">استيراد Excel</span><span class="index-page">ص٢٧</span></div>
+      <div class="index-item"><span class="index-word">الإدخال السريع</span><span class="index-page">ص١٢</span></div>
+      <div class="index-item"><span class="index-word">الإعدادات العامة</span><span class="index-page">ص٢١</span></div>
+      <div class="index-item"><span class="index-word">الأداء (لوحة)</span><span class="index-page">ص٢٢</span></div>
+      <div class="index-item"><span class="index-word">البادئة</span><span class="index-page">ص١٣</span></div>
+      <div class="index-item"><span class="index-word">التسلسل (رمز)</span><span class="index-page">ص١٣</span></div>
+      <div class="index-item"><span class="index-word">التصدير</span><span class="index-page">ص٢٧</span></div>
+      <div class="index-item"><span class="index-word">الجلسة</span><span class="index-page">ص٥</span></div>
+      <div class="index-item"><span class="index-word">الجواز الدبلوماسي</span><span class="index-page">ص١١</span></div>
+      <div class="index-item"><span class="index-word">الخادم (إيقاف)</span><span class="index-page">ص٦</span></div>
+      <div class="index-item"><span class="index-word">الرحلات (إدارة)</span><span class="index-page">ص١٧</span></div>
+      <div class="index-item"><span class="index-word">السجلات (Logs)</span><span class="index-page">ص٢٢</span></div>
+      <div class="index-item"><span class="index-word">المجموعات</span><span class="index-page">ص٢٢</span></div>
+      <div class="index-item"><span class="index-word">المراقب (System Tray)</span><span class="index-page">ص٥</span></div>
+      <div class="index-item"><span class="index-word">المرفقات</span><span class="index-page">ص١٤</span></div>
+      <div class="index-item"><span class="index-word">المشرف (دخول)</span><span class="index-page">ص٧</span></div>
+      <div class="index-item"><span class="index-word">المغادرة الجماعية</span><span class="index-page">ص١٥</span></div>
+      <div class="index-item"><span class="index-word">المغادرة السريعة</span><span class="index-page">ص١٢</span></div>
+      <div class="index-item"><span class="index-word">المستخدمون (إدارة)</span><span class="index-page">ص٢٣</span></div>
+      <div class="index-item"><span class="index-word">النسخ الاحتياطي</span><span class="index-page">ص٢٥</span></div>
+      <div class="index-item"><span class="index-word">تسجيل الدخول</span><span class="index-page">ص٧</span></div>
+      <div class="index-item"><span class="index-word">تشغيل النظام</span><span class="index-page">ص٥</span></div>
+      <div class="index-item"><span class="index-word">تقرير اليوم</span><span class="index-page">ص٢٧</span></div>
+      <div class="index-item"><span class="index-word">تقرير Word</span><span class="index-page">ص١٩</span></div>
+      <div class="index-item"><span class="index-word">حالة المكتب</span><span class="index-page">ص١٠</span></div>
+      <div class="index-item"><span class="index-word">حذف الجواز</span><span class="index-page">ص١١</span></div>
+      <div class="index-item"><span class="index-word">رقم الجواز (تنسيق)</span><span class="index-page">ص١٢</span></div>
+      <div class="index-item"><span class="index-word">ربط جوازات برحلة</span><span class="index-page">ص١٨</span></div>
+      <div class="index-item"><span class="index-word">استعادة نسخة</span><span class="index-page">ص٢٦</span></div>
+      <div class="index-item"><span class="index-word">Flask</span><span class="index-page">ص٤</span></div>
+      <div class="index-item"><span class="index-word">Python (تثبيت)</span><span class="index-page">ص٣</span></div>
+      <div class="index-item"><span class="index-word">Scanner</span><span class="index-page">ص١٢</span></div>
+      <div class="index-item"><span class="index-word">MRZ</span><span class="index-page">—</span></div>
+      <div class="index-item"><span class="index-word">passports.db</span><span class="index-page">ص٢٥</span></div>
+      <div class="index-item"><span class="index-word">بدء موسم جديد</span><span class="index-page">ص٢٢</span></div>
+      <div class="index-item"><span class="index-word">نقل جواز</span><span class="index-page">ص٢٩</span></div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">ملحق أ — الفهرس الأبجدي</span>
+    <span class="page-num">٣٢</span>
+  </div>
+</section>
+
+<!-- ╔═══════════════════════════════════════════════════════════╗ -->
+<!-- ║           APPENDIX B — معلومات الاتصال والدعم            ║ -->
+<!-- ╚═══════════════════════════════════════════════════════════╝ -->
+<section class="page" id="contact">
+  <div class="chapter-header">
+    <div class="chapter-num">ملحق ب</div>
+    <div class="chapter-title">
+      <div class="chapter-icon">📞</div>
+      معلومات الاتصال والدعم
+    </div>
+  </div>
+  <div class="page-content">
+
+    <p>للتواصل مع مطوّر النظام للدعم التقني أو الاستفسارات:</p>
+
+    <div class="contact-card">
+      <div class="contact-icon">👨‍💻</div>
+      <div class="contact-info">
+        <strong>فيصل الدباسي</strong>
+        <span>مطوّر نظام الجوازات</span>
+        <span style="margin-top:6px;color:var(--text2)">جميع الحقوق محفوظة © 2026</span>
+      </div>
+    </div>
+
+    <h2 class="section-title">معلومات النظام</h2>
+    <table class="data-table">
+      <thead><tr><th>البند</th><th>التفاصيل</th></tr></thead>
+      <tbody>
+        <tr><td>اسم النظام</td><td>نظام الجوازات</td></tr>
+        <tr><td>الوصف</td><td>نظام ويب لإدارة جوازات الحجاج</td></tr>
+        <tr><td>بيئة التشغيل</td><td>محلي عبر المتصفح (Localhost)</td></tr>
+        <tr><td>الرابط</td><td><code>http://127.0.0.1:5000</code></td></tr>
+        <tr><td>إصدار الدليل</td><td>2026 — الإصدار الأول</td></tr>
+        <tr><td>تاريخ الإصدار</td><td>١ مايو ٢٠٢٦</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">معلومات مهمة للحفظ</h2>
+    <div class="box box-warn">
+      <div class="box-title">⚠️ احتفظ بهذه البيانات في مكان آمن</div>
+      <table style="width:100%;margin-top:10px;font-size:12px">
+        <tr>
+          <td style="padding:6px 0;width:45%">كلمة مرور المشرف العام (الافتراضية):</td>
+          <td><code>••••••••</code> — <strong>تواصل مع المطوّر</strong></td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0">كلمة مرور بدء موسم جديد:</td>
+          <td>متاحة لدى المطوّر فقط</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2 class="section-title">عند الحاجة للدعم التقني</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-content">
+          <strong>شغّل النظام بالوضع اليدوي</strong>
+          <p>استخدم <code>تشغيل يدوي.bat</code> لرؤية رسائل الخطأ في نافذة CMD.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-content">
+          <strong>التقط رسالة الخطأ</strong>
+          <p>خذ صورة لشاشة CMD أو انسخ نص الخطأ.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-content">
+          <strong>تواصل مع المطوّر</strong>
+          <p>أرسل رسالة الخطأ + وصف المشكلة + إصدار Windows للدعم السريع.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back cover decoration -->
+    <div style="margin-top:32px;background:linear-gradient(135deg,#07111f,#0d1d35);border-radius:14px;padding:24px;text-align:center;border:1px solid rgba(129,212,255,0.1)">
+      <svg width="60" height="84" viewBox="0 0 200 280" fill="none" style="margin-bottom:12px">
+        <rect x="20" y="10" width="160" height="260" rx="18" fill="#1e3a5f" stroke="#81d4ff" stroke-width="4"/>
+        <rect x="20" y="10" width="10" height="260" rx="5" fill="#81d4ff" opacity="0.6"/>
+        <circle cx="110" cy="145" r="36" stroke="#81d4ff" stroke-width="3" fill="none" opacity="0.7"/>
+        <line x1="110" y1="145" x2="110" y2="111" stroke="#81d4ff" stroke-width="3"/>
+        <polygon points="110,105 115,120 110,116 105,120" fill="#81d4ff"/>
+        <line x1="110" y1="215" x2="165" y2="215" stroke="#81d4ff" stroke-width="2" opacity="0.4"/>
+        <line x1="110" y1="227" x2="165" y2="227" stroke="#81d4ff" stroke-width="2" opacity="0.3"/>
+      </svg>
+      <div style="color:#81d4ff;font-size:16px;font-weight:800;margin-bottom:4px">نظام الجوازات</div>
+      <div style="color:#adc2df;font-size:12px">دليل التشغيل والاستخدام — إصدار 2026</div>
+      <div style="color:rgba(173,194,223,0.4);font-size:11px;margin-top:8px">فيصل الدباسي — جميع الحقوق محفوظة © 2026</div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span class="page-footer-text">ملحق ب — معلومات الاتصال والدعم</span>
+    <span class="page-num">٣٤</span>
+  </div>
+</section>
+
+</div><!-- end page-wrapper -->
+
+<!-- Print Button -->
+<button class="print-btn" onclick="window.print()">
+  🖨️ طباعة / تصدير PDF
+</button>
+
+<script>
+  // Active nav highlighting
+  const sections = document.querySelectorAll('[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === '#' + id) {
+            item.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>

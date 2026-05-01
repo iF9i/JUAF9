@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>نظام الجوازات</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<button class="theme-fab" id="theme-fab" onclick="toggleTheme()" title="تبديل الثيم"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:22px;height:22px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg></button>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════ -->
+<div class="scr on" id="s-login">
+<div class="login-wrap">
+
+  <!-- Step 1 -->
+  <div class="login-card" id="step1">
+    <div class="login-icon" style="background:transparent;border:none;box-shadow:none">
+      <img src="/static/logo.svg" class="theme-logo" width="56" height="82" style="object-fit:contain;filter:drop-shadow(0 0 12px rgba(129,212,255,0.35))">
+    </div>
+    <div class="login-title">نظام الجوازات</div>
+    <div class="login-sub">اختر مجموعتك للمتابعة</div>
+    <div class="groups-grid" id="grp-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--tx3)">جاري التحميل...</div>
+    </div>
+    <div class="divider"><span>أو</span></div>
+    <button class="btn" style="font-size:14px" onclick="pickGroup('admin','مشرف عام')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg> دخول المشرف</button>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="login-card" id="step2" style="display:none">
+    <button class="back-link" onclick="backToStep1()">← رجوع</button>
+    <div><span class="selected-badge" id="sel-badge"></span></div>
+    <div class="field" style="margin-top:18px"><label>اسم المستخدم</label>
+      <input class="inp" type="text" id="l-user" placeholder="username" autocomplete="username" style="direction:ltr">
+    </div>
+    <div class="field"><label>كلمة السر</label>
+      <input class="inp" type="password" id="l-pw" placeholder="••••••"
+             onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="msg-err" id="l-err"></div>
+    </div>
+    <button class="btn btn-p" id="l-btn" onclick="doLogin()">دخول</button>
+  </div>
+
+</div>
+  <div style="text-align:center;font-size:11px;color:var(--tx3);margin-top:14px">تطوير وتصميم: فيصل الدباسي<br>جميع الحقوق محفوظة © 2025</div>
+</div>
+
+<!-- ══ ADMIN ══════════════════════════════════════════════════ -->
+<div class="scr" id="s-admin">
+<div class="adm-layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sb">
+    <div class="sb-logo">
+      <img src="/static/logo.svg" class="theme-logo" width="44" height="64" style="object-fit:contain;filter:drop-shadow(0 0 8px rgba(129,212,255,0.3))">
+      <div class="sb-logo-name">نظام<br>الجوازات</div>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-item on" onclick="aTab('ov',this)" data-tab="ov">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l6 3.3v5.1c0 4.2-2.8 7.8-6 9.2-3.2-1.4-6-5-6-9.2V6.3L12 3z"/><path d="M9.5 11.5h5M9.5 14.5h5"/><path d="M10.4 9h3.2"/></svg>
+        لوحة التحكم
+      </button>
+
+      <button class="sb-item" onclick="aTab('logs',this)" data-tab="logs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4 4V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2z"/><path d="M14 3.5V8h4"/><path d="M8.5 11.5h7"/><path d="M8.5 15h7"/><path d="M8.5 18.5h4"/></svg>
+        السجلات
+      </button>
+      <button class="sb-item" onclick="aTab('perf',this)" data-tab="perf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5h16"/><path d="M6.5 16l3-3 3 1.8 4.8-5.3"/><path d="M16.5 9.5H19V12"/><path d="M6 9.5v6"/><path d="M10 12v3.5"/><path d="M14 10.5v5"/></svg>
+        الأداء
+      </button>
+      <button class="sb-item" onclick="aTab('attach',this)" data-tab="attach">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        المرفقات
+      </button>
+      <button class="sb-item" onclick="aTab('bak',this)" data-tab="bak">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM12.75 18h9.75M12.75 18a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-6.75 0H3m3 0H3.75m.75-6h16.5M3.75 12h.008v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+        الإعدادات
+      </button>
+    </nav>
+    <div class="sb-foot">
+      <button class="sb-item" onclick="location.href='/scan'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5V6.8A1.8 1.8 0 0 1 5.8 5H8"/><path d="M20 8.5V6.8A1.8 1.8 0 0 0 18.2 5H16"/><path d="M4 15.5v1.7A1.8 1.8 0 0 0 5.8 19H8"/><path d="M20 15.5v1.7a1.8 1.8 0 0 1-1.8 1.8H16"/><rect x="8.2" y="8.1" width="7.6" height="7.8" rx="1.7"/><path d="M10.5 10.9h3.4M10.5 13.1h2"/></svg>
+        الإدخال السريع
+      </button>
+      <button class="sb-item" onclick="location.href='/scan?mode=depart'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18.5h18"/><path d="M6 15.5l4.2-4.2 3.1 2.4L20 7.5"/><path d="M17.2 7.5H20v2.8"/><path d="M8.7 10.5h2.2"/><path d="M13.3 15.3l1.5-.2-.3-1.5 4.7-4.7 1.7 1.7-4.8 4.7z"/></svg>
+        المغادرة السريعة
+      </button>
+      <button class="sb-item" onclick="openList()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="17" x2="13" y2="17"/></svg>
+        الجوازات
+      </button>
+      <button class="sb-item" onclick="openSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.35-4.35"/></svg>
+        بحث عن جواز
+      </button>
+      <button class="sb-item sb-logout" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        تسجيل خروج
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main class="sb-main">
+    <div class="sb-topbar">
+      <div class="sb-page-title" id="sb-page-title">لوحة التحكم</div>
+      <div id="srv-status" title="حالة السيرفر" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3)">
+        <span id="srv-dot" style="width:8px;height:8px;border-radius:50%;background:#6B7280;display:inline-block"></span>
+        <span id="srv-txt">...</span>
+      </div>
+    </div>
+    <div class="sb-content">
+    <div class="stats">
+      <div class="stat"><div class="stat-n c-accent" id="at">—</div><div class="stat-l">إجمالي</div></div>
+      <div class="stat"><div class="stat-n c-ok"     id="aa">—</div><div class="stat-l">مفعّل</div></div>
+      <div class="stat"><div class="stat-n c-warn"   id="ad">—</div><div class="stat-l">غادروا</div></div>
+      <div class="stat"><div class="stat-n c-err"    id="ai">—</div><div class="stat-l">غير مفعّل</div></div>
+      <div class="stat" id="stat-del" style="display:none"><div class="stat-n" style="color:#9CA3AF" id="adel">—</div><div class="stat-l">محذوف</div></div>
+    </div>
+
+    <!-- Overview -->
+    <div id="t-ov">
+      <div class="card">
+        <div class="card-title">الإجراءات السريعة</div>
+        <div class="btn-g2">
+          <button class="btn btn-p" onclick="printTodayReport()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z"/></svg> طباعة تقرير اليوم</button>
+          <button class="btn" onclick="openOfficeDashboard()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/></svg> حالة المكتب</button>
+          <button class="btn" onclick="exportExcel()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg> تصدير كل الجوازات</button>
+          <button class="btn" onclick="openImport()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg> استيراد جماعي</button>
+          <button class="btn" onclick="openTripsScreen()">إدارة الرحلات</button>
+        </div>
+      </div>
+      <div class="card" id="trip-panel" style="display:none"><div class="card-title">إنشاء رحلة</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <select class="inp" id="trip-group-id"><option value="">اختر المجموعة</option></select>
+            <input class="inp" id="trip-report-date" type="date" onchange="refreshTripSelects()">
+          <input class="inp" id="trip-hotel-name" placeholder="اسم الفندق">
+          <input class="inp" id="trip-location-url" placeholder="رابط الموقع">
+          <input class="inp" id="trip-nationality" placeholder="الجنسية">
+          <input class="inp" id="trip-flight-no" placeholder="رقم الرحلة" style="direction:ltr">
+          <input class="inp" id="trip-carrier" placeholder="الشركة الناقلة">
+          <input class="inp" id="trip-destination" placeholder="الوجهة">
+          <input class="inp" id="trip-approval-no" placeholder="رقم الاعتماد">
+          <input class="inp" id="trip-departure-time" placeholder="وقت الإقلاع">
+          <input class="inp" id="trip-housing-contract-no" placeholder="رقم عقد السكن">
+          <input class="inp" id="trip-bus-stand-time" placeholder="وقت وقوف الحافلة">
+          <input class="inp" id="trip-bus-departure-time" placeholder="وقت مغادرة الحافلة">
+          <input class="inp" id="trip-planned-pilgrim-count" placeholder="اجمالي عدد الحجاج" type="number" min="0">
+          <input class="inp" id="trip-bus-count" placeholder="عدد الحافلات" type="number" min="0">
+          <input class="inp" id="trip-notes" placeholder="الملاحظات">
+        </div>
+        <div class="btn-g2">
+          <button class="btn btn-p" onclick="createTrip()">إنشاء رحلة</button>
+          <button class="btn" onclick="downloadDailyTripsReport()">تقرير Word</button>
+        </div>
+        <div id="trip-assign-panel" style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+          <div class="card-title" style="font-size:15px">ربط حجاج برحلة</div>
+          <select class="inp" id="assign-trip-id" style="margin-bottom:8px"></select>
+          <textarea class="inp" id="assign-passports" rows="3" placeholder="أرقام الجوازات مفصولة بفواصل أو أسطر" style="direction:ltr"></textarea>
+          <button class="btn" onclick="assignTripPassports()" style="margin-top:8px">ربط الجوازات</button>
+        </div>
+        <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+          <div class="card-title" style="font-size:15px">الرحلات الحالية</div>
+          <div id="trip-manage-list" style="display:grid;gap:8px">
+            <div style="text-align:center;padding:14px;color:var(--tx3)">جاري التحميل...</div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-title">المجموعات</div>
+        <div id="adm-grps"><div style="text-align:center;padding:20px;color:var(--tx3)">جاري التحميل...</div></div>
+      </div>
+    </div>
+
+    <!-- Logs -->
+    <div id="t-logs" style="display:none">
+      <div class="card"><div class="card-title">فلتر</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <div class="field" style="margin:0"><label>المستخدم</label>
+            <input class="inp" type="text" id="lf-u" placeholder="الكل"></div>
+          <div class="field" style="margin:0"><label>العملية</label>
+            <select class="inp" id="lf-a">
+              <option value="">الكل</option>
+              <option>دخول</option><option>خروج</option>
+              <option>إضافة</option><option>تعديل</option>
+              <option>مغادرة</option><option>إلغاء مغادرة</option>
+              <option>حذف</option><option>استيراد</option>
+            </select></div>
+        </div>
+        <div class="field" style="margin-bottom:10px"><label>رقم الجواز</label>
+          <input class="inp" type="text" id="lf-p" placeholder="بحث..." style="direction:ltr"></div>
+        <button class="btn btn-p" onclick="loadLogs(1)">بحث</button>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>الوقت</th><th>المستخدم</th><th>العملية</th><th>الجواز</th></tr></thead>
+            <tbody id="logs-body">
+              <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--tx3)">اضغط بحث</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pag" id="logs-pag"></div>
+      </div>
+    </div>
+
+    <!-- Performance -->
+    <div id="t-perf" style="display:none">
+      <div class="card"><div class="card-title">فترة الإحصاء</div>
+        <div class="filters">
+          <button class="fb on" onclick="loadPerf('day',this)">اليوم</button>
+          <button class="fb" onclick="loadPerf('week',this)">الأسبوع</button>
+          <button class="fb" onclick="loadPerf('month',this)">الشهر</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>#</th><th>الموظف</th><th>المجموعة</th><th>إضافات</th><th>تعديلات</th><th>مغادرات</th><th>حذف</th><th>المجموع</th></tr></thead>
+            <tbody id="perf-body">
+              <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--tx3)">جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employees -->
+    <!-- Settings (includes Groups + Users) -->
+    <!-- Attachments tab -->
+    <div id="t-attach" style="display:none">
+      <div class="card">
+        <div class="card-title">كل المرفقات</div>
+        <div id="all-attach-list"><div style="text-align:center;padding:20px;color:var(--tx3)">جاري التحميل...</div></div>
+      </div>
+    </div>
+
+    <div id="t-bak" style="display:none">
+      <div style="display:flex;gap:6px;margin-bottom:14px">
+        <button class="nav-btn primary" id="stab-bak" onclick="aSettingsTab('bak')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg> الإعدادات</button>
+        <button class="nav-btn"         id="stab-grp" onclick="aSettingsTab('grp')">المجموعات</button>
+        <button class="nav-btn"         id="stab-emp" onclick="aSettingsTab('emp')">المستخدمون</button>
+      </div>
+      <div id="st-bak">
+        <div class="card"><div class="card-title">النسخ الاحتياطي</div>
+          <button class="btn btn-p" id="bak-btn" onclick="doBak()" style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg> إنشاء نسخة الآن</button>
+          <div id="bak-list"><div style="text-align:center;padding:16px;color:var(--tx3)">جاري التحميل...</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">إيقاف الخادم</div>
+          <p style="font-size:13px;color:var(--tx2);margin-bottom:14px">
+            يوقف الخادم ويغلق البرنامج — استخدم فقط عند الانتهاء من العمل.
+          </p>
+          <button class="btn btn-err" onclick="shutdownServer()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"/></svg> إيقاف الخادم</button>
+        </div>
+        <!-- موسم جديد -->
+        <div class="card" style="border-color:rgba(251,113,133,.28);margin-top:14px">
+          <div class="card-title" style="color:var(--err-tx)">منطقة خطرة</div>
+          <p style="font-size:13px;color:var(--tx2);margin-bottom:14px">
+            يحذف جميع الجوازات والمجموعات والسجلات — للبدء بموسم جديد. سيتم أخذ نسخة احتياطية تلقائياً.
+          </p>
+          <button class="btn btn-warn" onclick="openResetSeason()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg> بدء موسم جديد</button>
+        </div>
+      </div>
+      <div id="st-grp" style="display:none">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <span class="card-title" style="margin:0">المجموعات</span>
+            <button class="nav-btn primary" onclick="openGroupModal(null)">+ إضافة</button>
+          </div>
+          <div id="grp-list"><div style="text-align:center;padding:20px;color:var(--tx3)">جاري التحميل...</div></div>
+        </div>
+      </div>
+      <div id="st-emp" style="display:none">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <span class="card-title" style="margin:0">المستخدمون</span>
+            <button class="nav-btn primary" onclick="openUserModal(null)">+ إضافة</button>
+          </div>
+          <div id="emp-list"><div style="text-align:center;padding:20px;color:var(--tx3)">جاري التحميل...</div></div>
+        </div>
+      </div>
+    </div>
+    </div><!-- sb-content -->
+  </main>
+</div><!-- adm-layout -->
+</div><!-- s-admin -->
+
+<!-- ══ WORKER ══════════════════════════════════════════════════ -->
+<div class="scr" id="s-worker">
+  <nav class="nav">
+    <div>
+      <div class="nav-title" id="w-group">المجموعة</div>
+      <div class="nav-sub" id="w-user">الموظف</div>
+    </div>
+    <button class="nav-btn" onclick="openList()" title="قائمة الجوازات" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg></button>
+    <button class="nav-btn" onclick="openSearch()" title="بحث عن جواز" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg></button>
+  </nav>
+  <div class="pg">
+    <div class="stats">
+      <div class="stat"><div class="stat-n c-accent" id="wt">—</div><div class="stat-l">إجمالي</div></div>
+      <div class="stat"><div class="stat-n c-ok"     id="wa">—</div><div class="stat-l">مفعّل</div></div>
+      <div class="stat"><div class="stat-n c-warn"   id="wd">—</div><div class="stat-l">غادر</div></div>
+      <div class="stat"><div class="stat-n c-err"    id="wi">—</div><div class="stat-l">غير مفعّل</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">الإجراءات السريعة</div>
+      <div style="display:flex;gap:8px;margin-bottom:4px;align-items:center">
+        <input class="inp" id="w-srch" type="text" placeholder="رقم الجواز..."
+               style="flex:1;direction:ltr;letter-spacing:2px;font-size:16px;font-weight:700"
+               oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+               onkeydown="if(event.key==='Enter')wSearch()">
+      </div>
+      <div id="w-srch-body" style="margin-bottom:8px"></div>
+      <div class="btn-g2">
+        <button class="btn" onclick="openOfficeDashboard()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/></svg> حالة المكتب</button>
+        <button class="btn" onclick="location.href='/scan'"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg> الإدخال السريع</button>
+        <button class="btn" onclick="openBulkDepart()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"/></svg> المغادرة السريعة</button>
+        <button class="btn" onclick="openList()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;height:18px;vertical-align:middle;margin-left:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z"/></svg> الجوازات</button>
+      </div>
+      <button class="btn" style="margin-top:10px" onclick="openTripsScreen()">إدارة الرحلات</button>
+      <button class="btn" style="margin-top:10px" onclick="doLogout()">خروج</button>
+    </div>
+    <div class="card" id="worker-trip-card" style="display:none">
+      <div class="card-title">إدارة الرحلات</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input class="inp" id="wtrip-report-date" type="date" onchange="loadWorkerTrips()">
+        <button class="btn" type="button" onclick="loadWorkerTrips()">تحديث الرحلات</button>
+        <input class="inp" id="wtrip-hotel-name" placeholder="اسم الفندق">
+        <input class="inp" id="wtrip-location-url" placeholder="رابط الموقع">
+        <input class="inp" id="wtrip-nationality" placeholder="الجنسية">
+        <input class="inp" id="wtrip-flight-no" placeholder="رقم الرحلة" style="direction:ltr">
+        <input class="inp" id="wtrip-carrier" placeholder="الشركة الناقلة">
+        <input class="inp" id="wtrip-destination" placeholder="الوجهة">
+        <input class="inp" id="wtrip-approval-no" placeholder="رقم الاعتماد">
+        <input class="inp" id="wtrip-departure-time" placeholder="وقت الإقلاع">
+        <input class="inp" id="wtrip-housing-contract-no" placeholder="رقم عقد السكن">
+        <input class="inp" id="wtrip-bus-stand-time" placeholder="وقت وقوف الحافلة">
+        <input class="inp" id="wtrip-bus-departure-time" placeholder="وقت مغادرة الحافلة">
+        <input class="inp" id="wtrip-planned-pilgrim-count" placeholder="اجمالي عدد الحجاج" type="number" min="0">
+        <input class="inp" id="wtrip-bus-count" placeholder="عدد الحافلات" type="number" min="0">
+        <input class="inp" id="wtrip-notes" placeholder="الملاحظات" style="grid-column:1/-1">
+      </div>
+      <div class="btn-g2">
+        <button class="btn btn-p" type="button" onclick="createWorkerTrip()">إنشاء رحلة</button>
+        <button class="btn" type="button" onclick="downloadWorkerTripReport()">إصدار تقرير الرحلة</button>
+      </div>
+      <div id="wtrip-assign-panel" style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+        <div class="card-title" style="font-size:15px">ربط حجاج برحلة</div>
+        <select class="inp" id="wtrip-assign-trip-id" style="margin-bottom:8px"></select>
+        <textarea class="inp" id="wtrip-assign-passports" rows="3" placeholder="أرقام الجوازات مفصولة بفواصل أو أسطر" style="direction:ltr"></textarea>
+        <button class="btn" type="button" onclick="assignWorkerTripPassports()" style="margin-top:8px">ربط الجوازات</button>
+      </div>
+      <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+        <div class="card-title" style="font-size:15px">الرحلات الحالية</div>
+        <div id="wtrip-manage-list" style="display:grid;gap:8px">
+          <div style="text-align:center;padding:14px;color:var(--tx3)">جاري التحميل...</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 18px;font-size:11px;color:var(--tx3);text-align:center;border-top:1px solid var(--border-l)">تطوير وتصميم: فيصل الدباسي<br>جميع الحقوق محفوظة © 2025</div>
+  </div>
+</div>
+
+<div class="scr" id="s-trips">
+  <nav class="nav">
+    <div>
+      <div class="nav-title" id="trips-screen-title">إدارة الرحلات</div>
+      <div class="nav-sub" id="trips-screen-sub">متابعة الرحلات</div>
+    </div>
+    <button class="nav-btn" onclick="closeTripsScreen()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/></svg> رجوع</button>
+  </nav>
+  <div class="pg">
+    <div id="trips-admin-shell" style="display:none">
+      <div id="trips-admin-host"></div>
+    </div>
+    <div id="trips-worker-shell" style="display:none">
+      <div id="trips-worker-host"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODALS ════════════════════════════════════════════════ -->
+
+<div class="modal-bg" id="m-trip-edit">
+  <div class="modal" style="max-width:720px">
+    <h3>تعديل الرحلة</h3>
+    <input type="hidden" id="trip-edit-mode">
+    <input type="hidden" id="trip-edit-id">
+    <div class="field" id="trip-edit-group-wrap" style="display:none">
+      <label>المجموعة</label>
+      <select class="inp" id="trip-edit-group-id"><option value="">اختر المجموعة</option></select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="field" style="margin:0"><label>تاريخ التقرير</label><input class="inp" id="trip-edit-report-date" type="date"></div>
+      <div class="field" style="margin:0"><label>اسم الفندق</label><input class="inp" id="trip-edit-hotel-name"></div>
+      <div class="field" style="margin:0"><label>رابط الموقع</label><input class="inp" id="trip-edit-location-url"></div>
+      <div class="field" style="margin:0"><label>الجنسية</label><input class="inp" id="trip-edit-nationality"></div>
+      <div class="field" style="margin:0"><label>رقم الرحلة</label><input class="inp" id="trip-edit-flight-no" style="direction:ltr"></div>
+      <div class="field" style="margin:0"><label>الشركة الناقلة</label><input class="inp" id="trip-edit-carrier"></div>
+      <div class="field" style="margin:0"><label>الوجهة</label><input class="inp" id="trip-edit-destination"></div>
+      <div class="field" style="margin:0"><label>رقم الاعتماد</label><input class="inp" id="trip-edit-approval-no"></div>
+      <div class="field" style="margin:0"><label>وقت الإقلاع</label><input class="inp" id="trip-edit-departure-time"></div>
+      <div class="field" style="margin:0"><label>رقم عقد السكن</label><input class="inp" id="trip-edit-housing-contract-no"></div>
+      <div class="field" style="margin:0"><label>وقت وقوف الحافلة</label><input class="inp" id="trip-edit-bus-stand-time"></div>
+      <div class="field" style="margin:0"><label>وقت مغادرة الحافلة</label><input class="inp" id="trip-edit-bus-departure-time"></div>
+      <div class="field" style="margin:0"><label>اجمالي عدد الحجاج</label><input class="inp" id="trip-edit-planned-pilgrim-count" type="number" min="0"></div>
+      <div class="field" style="margin:0"><label>عدد الحافلات</label><input class="inp" id="trip-edit-bus-count" type="number" min="0"></div>
+      <div class="field" style="margin:0;grid-column:1/-1"><label>الملاحظات</label><input class="inp" id="trip-edit-notes"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-p" type="button" onclick="submitTripEdit()">حفظ التعديل</button>
+      <button class="btn" type="button" onclick="closeDlg('m-trip-edit')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="m-trip-review">
+  <div class="modal" style="max-width:760px">
+    <h3>مراجعة الرحلة</h3>
+    <input type="hidden" id="trip-review-mode">
+    <input type="hidden" id="trip-review-id">
+    <div id="trip-review-info" style="font-size:13px;color:var(--tx2);line-height:1.8;margin-bottom:12px"></div>
+    <div id="trip-review-counts" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px"></div>
+    <div class="tbl-wrap" style="max-height:300px">
+      <table class="tbl">
+        <thead><tr><th>الجواز</th><th>الكود</th><th>الحالة</th><th>المغادرة</th></tr></thead>
+        <tbody id="trip-review-body">
+          <tr><td colspan="4" style="text-align:center;padding:16px;color:var(--tx3)">جاري التحميل...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-p" id="trip-review-confirm-btn" type="button" onclick="submitTripDepartReview()">تأكيد مغادرة الرحلة</button>
+      <button class="btn" type="button" onclick="closeDlg('m-trip-review')">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- User modal -->
+<div class="modal-bg" id="m-user">
+  <div class="modal">
+    <h3 id="um-title">إضافة موظف</h3>
+    <input type="hidden" id="um-id">
+    <div class="field"><label>اسم المستخدم</label>
+      <input class="inp" type="text" id="um-user" placeholder="username" style="direction:ltr">
+    </div>
+    <div class="field"><label>كلمة السر <span style="color:var(--tx3);font-size:11px">(فارغ = لا تغيير)</span></label>
+      <input class="inp" type="password" id="um-pw" placeholder="••••••">
+    </div>
+    <div class="field"><label>الدور</label>
+      <select class="inp" id="um-role" onchange="toggleGroupField()">
+        <option value="worker">موظف</option>
+        <option value="admin">مشرف</option>
+      </select>
+    </div>
+    <div class="field" id="um-grp-f"><label>المجموعة</label>
+      <select class="inp" id="um-grp"><option value="">— اختر —</option></select>
+    </div>
+    <div class="field"><label>الحالة</label>
+      <select class="inp" id="um-active">
+        <option value="1">مفعّل</option>
+        <option value="0">معطّل</option>
+      </select>
+    </div>
+    <div class="msg-err" id="um-err"></div>
+    <div class="modal-actions">
+      <button class="btn btn-p" onclick="saveUser()">حفظ</button>
+      <button class="btn" onclick="closeDlg('m-user')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Group modal -->
+<div class="modal-bg" id="m-grp">
+  <div class="modal" style="max-width:500px">
+    <h3 id="gm-title">إضافة مجموعة</h3>
+    <input type="hidden" id="gm-orig">
+    <input type="hidden" id="gm-icon" value="users">
+    <input type="hidden" id="gm-color" value="#3B82F6">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="field" style="margin:0"><label>معرّف المجموعة</label>
+        <input class="inp" type="text" id="gm-id" placeholder="group_id" style="direction:ltr">
+      </div>
+      <div class="field" style="margin:0"><label>اسم المجموعة</label>
+        <input class="inp" type="text" id="gm-name" placeholder="الاسم بالعربي">
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px"><label>البادئة <span style="color:var(--tx3);font-size:11px">(مثال: A)</span></label>
+      <input class="inp" type="text" id="gm-prefix" placeholder="A"
+             style="direction:ltr;letter-spacing:3px;font-weight:700;font-size:18px;max-width:80px"
+             maxlength="3" oninput="this.value=this.value.toUpperCase()">
+      <span style="font-size:12px;color:var(--tx2);margin-right:10px">→ <strong id="gm-preview" style="color:var(--accent);direction:ltr;display:inline-block">A-1، A-2...</strong></span>
+    </div>
+    <div class="field"><label>الأيقونة</label>
+      <div id="gm-icon-pick" class="icon-pick"></div>
+    </div>
+    <div class="field"><label>اللون</label>
+      <div class="color-pick" id="gm-clr-pick"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div id="gm-hex-preview"></div>
+      <span style="font-size:13px;color:var(--tx2)">معاينة الأيقونة</span>
+    </div>
+    <div class="msg-err" id="gm-err"></div>
+    <div class="modal-actions">
+      <button class="btn btn-p" onclick="saveGroup()">حفظ</button>
+      <button class="btn" onclick="closeDlg('m-grp')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- List modal -->
+<!-- ══ BULK DEPART SCREEN ══════════════════════════════════ -->
+<div class="scr" id="s-bulk">
+  <nav class="nav">
+    <div>
+      <div class="nav-title"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"/></svg> المغادرة الجماعية</div>
+      <div class="nav-sub" id="bulk-nav-count"></div>
+    </div>
+    <button class="nav-btn" onclick="closeBulkDepart()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/></svg> رجوع</button>
+  </nav>
+  <div class="pg">
+    <div class="card">
+      <div class="card-title">أدخل أرقام الجوازات</div>
+      <div class="field">
+        <input id="bulk-inp" class="inp" type="text" placeholder="رقم الجواز + Enter — أو الصق عدة أرقام دفعة واحدة"
+          style="direction:ltr;letter-spacing:1px;font-size:16px"
+          oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+          onkeydown="if(event.key==='Enter'){bulkAdd(this.value);this.value='';}"
+          onpaste="bulkPasteHandler(event)">
+      </div>
+      <div id="bulk-list" style="margin-bottom:12px;max-height:320px;overflow-y:auto"></div>
+      <div id="bulk-count" style="font-size:13px;color:var(--tx2);margin-bottom:12px;text-align:center"></div>
+      <button id="bulk-confirm-btn" class="btn btn-warn" onclick="confirmBulkDepart()" disabled>
+        تأكيد المغادرة
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LIST SCREEN ══════════════════════════════════════════ -->
+<div class="scr" id="s-list">
+  <nav class="nav">
+    <div>
+      <div class="nav-title">قائمة الجوازات</div>
+      <div class="nav-sub" id="sl-count"></div>
+    </div>
+    <button class="nav-btn" onclick="closeList()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/></svg> رجوع</button>
+  </nav>
+  <div class="pg">
+    <div class="card" style="padding:12px 14px;margin-bottom:12px">
+      <div id="sl-grp-wrap" style="display:none;margin-bottom:10px">
+        <select class="inp" id="sl-gid" onchange="slSetGid()" style="width:100%">
+          <option value="">كل المجموعات</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="nav-btn primary" id="slf-all"      onclick="slSetFilter('all')">الكل</button>
+        <button class="nav-btn"         id="slf-active"   onclick="slSetFilter('active')">مفعّل</button>
+        <button class="nav-btn"         id="slf-inactive" onclick="slSetFilter('inactive')">غير مفعّل</button>
+        <button class="nav-btn"         id="slf-departed" onclick="slSetFilter('departed')">غادر</button>
+        <button class="nav-btn"         id="slf-deleted"  onclick="slSetFilter('deleted')" style="display:none;color:var(--err-tx)">محذوف</button>
+      </div>
+    </div>
+    <div id="sl-body"></div>
+    <div id="sl-pages" style="display:flex;justify-content:center;gap:6px;margin:12px 0"></div>
+  </div>
+</div>
+
+<!-- Notes modal -->
+<div class="modal-bg" id="m-notes" style="align-items:flex-start;padding-top:5vh;z-index:600;overflow-x:hidden">
+  <div class="modal" style="max-width:460px;width:calc(100% - 32px);max-height:90vh;overflow-y:auto;overflow-x:hidden;margin:auto">
+    <h3 style="margin-bottom:14px"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg> الملاحظات والمرفقات</h3>
+    <textarea class="inp" id="notes-ta" rows="4"
+              placeholder="اكتب ملاحظاتك هنا..."
+              style="width:100%;resize:vertical;font-size:14px;line-height:1.6"></textarea>
+    <div id="notes-err" style="color:var(--err-tx);font-size:13px;margin-top:6px;display:none"></div>
+    <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:13px;font-weight:600;color:var(--tx2)">المرفقات</span>
+        <button class="btn" style="padding:3px 12px;font-size:12px" onclick="modalPickFile()">+ إضافة</button>
+      </div>
+      <div id="modal-attach-list"></div>
+      <input type="file" id="modal-attach-inp" style="display:none" accept="image/*,.pdf,.doc,.docx" onchange="modalAttachFileChanged(this)">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-p" id="notes-save-btn" style="flex:1" onclick="srchSaveNotes()">حفظ</button>
+      <button class="btn" style="flex:0 0 auto" onclick="closeDlg('m-notes')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Search modal -->
+<div class="modal-bg" id="m-search">
+  <div class="modal" style="max-width:480px;width:100%">
+    <h3 style="margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg> بحث عن جواز</h3>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <input class="inp" id="srch-q" type="text" placeholder="رقم الجواز (AA0000000)"
+             style="flex:1;direction:ltr;letter-spacing:2px;font-size:18px;font-weight:700"
+             oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+             onkeydown="if(event.key==='Enter')execSearch();else if(event.key==='Escape')closeDlg('m-search')">
+      <button class="btn btn-p" id="srch-btn" onclick="execSearch()" style="flex:0 0 auto;width:auto;padding-inline:22px">بحث</button>
+    </div>
+    <div id="srch-body"></div>
+    <button class="btn" style="margin-top:14px;width:100%" onclick="closeDlg('m-search')">إغلاق</button>
+  </div>
+</div>
+
+<!-- Transfer modal -->
+<div class="modal-bg" id="m-transfer">
+  <div class="modal">
+    <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/></svg> استعادة ونقل</h3>
+    <div style="background:var(--surface2,#F0F9FF);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="color:var(--tx2)">الجواز</span>
+        <strong id="tr-pp" style="direction:ltr"></strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="color:var(--tx2)">المجموعة الأصلية</span>
+        <strong id="tr-old-grp"></strong>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="color:var(--tx2)">الرقم الأصلي</span>
+        <strong id="tr-old-seq" style="color:var(--accent);direction:ltr"></strong>
+      </div>
+    </div>
+    <div class="field">
+      <label>المجموعة الجديدة</label>
+      <select class="inp" id="tr-gid" onchange="onTrGrpChange()">
+        <option value="">— اختر —</option>
+      </select>
+    </div>
+    <div id="tr-preview" style="display:none;background:#F0FDF4;border-radius:8px;
+         padding:10px 14px;font-size:13px;margin-bottom:4px;text-align:center;
+         color:#166534;font-weight:600;line-height:1.8">
+    </div>
+    <div class="msg-err" id="tr-err" style="display:none;margin-top:8px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-p" onclick="confirmTransfer()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/></svg> نقل واستعادة</button>
+      <button class="btn" onclick="closeDlg('m-transfer')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete group confirm -->
+<div class="modal-bg" id="m-delgrp">
+  <div class="modal">
+    <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg> حذف مجموعة</h3>
+    <p style="color:var(--tx2);margin-bottom:16px">
+      ستُحذف مجموعة <strong id="delgrp-name" style="color:var(--err-tx)"></strong> نهائياً.<br>
+      <small style="color:var(--tx3)">الجوازات المرتبطة تبقى في قاعدة البيانات.</small>
+    </p>
+    <div class="field"><label>الموظفون المرتبطون:</label>
+      <select class="inp" id="delgrp-emp">
+        <option value="disable">تعطيل حسابات الموظفين</option>
+        <option value="delete">حذف حسابات الموظفين</option>
+      </select>
+    </div>
+    <input type="hidden" id="delgrp-id">
+    <div class="modal-actions">
+      <button class="btn btn-err" onclick="confirmDelGrp()">نعم، احذف</button>
+      <button class="btn" onclick="closeDlg('m-delgrp')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import modal -->
+<div class="modal-bg" id="m-import">
+  <div class="modal" style="max-width:480px">
+    <h3 style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico-lg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg> استيراد جماعي</h3>
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:18px">
+      رفع ملف Excel يحتوي على أرقام الجوازات
+    </p>
+    <div class="field"><label>المجموعة</label>
+      <select class="inp" id="imp-gid"></select>
+    </div>
+    <div class="field"><label>ملف Excel (.xlsx)</label>
+      <input class="inp" type="file" id="imp-file" accept=".xlsx,.xls" style="padding:8px">
+    </div>
+    <div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--tx2);margin-bottom:16px;line-height:1.8">
+      <strong>تنسيق الملف:</strong><br>
+      العمود A: رقم الجواز (مثال: AB1234567) ← <strong>مطلوب</strong><br>
+      العمود B: حالة نسك (مفعل / غير مفعل) ← اختياري<br>
+      العمود C: ملاحظات ← اختياري<br>
+      السطر الأول يُتجاهل تلقائياً إذا كان عنواناً
+    </div>
+    <div id="imp-res" style="display:none;margin-bottom:14px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-p" id="imp-btn" onclick="doImport()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ico"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg> استيراد</button>
+      <button class="btn" onclick="closeDlg('m-import');document.getElementById('imp-res').style.display='none'">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-bg" id="modal-reset">
+  <div class="modal" style="max-width:380px">
+    <div style="font-size:18px;font-weight:700;margin-bottom:8px;color:var(--warn-tx)">تحذير — موسم جديد</div>
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:18px">سيتم حذف <strong style="color:var(--err-tx)">جميع الجوازات والمجموعات والسجلات</strong> بشكل نهائي. أدخل كلمة السر للمتابعة.</p>
+    <div class="field">
+      <label>كلمة السر</label>
+      <input class="inp" type="password" id="reset-pw" placeholder="••••••••" style="direction:ltr" onkeydown="if(event.key==='Enter')confirmResetSeason()">
+      <div class="msg-err" id="reset-err"></div>
+    </div>
+    <div class="btn-g2" style="margin-top:4px">
+      <button class="btn" onclick="closeResetModal()">إلغاء</button>
+      <button class="btn btn-err" onclick="confirmResetSeason()">تأكيد الحذف</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div id="img-viewer" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);cursor:zoom-out;align-items:center;justify-content:center" onclick="this.style.display='none'">
+  <img id="img-viewer-img" style="max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
+</div>
+<script>
+function tripValue(id){
+  var el=document.getElementById(id);
+  return el?el.value:'';
+}
+
+function tripEscapeHtml(value){
+  return String(value==null?'':value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function tripToday(){
+  var today=new Date();
+  var yyyy=today.getFullYear();
+  var mm=String(today.getMonth()+1).padStart(2,'0');
+  var dd=String(today.getDate()).padStart(2,'0');
+  return yyyy+'-'+mm+'-'+dd;
+}
+
+function tripFormIds(){
+  return [
+    'trip-hotel-name','trip-location-url','trip-nationality','trip-flight-no',
+    'trip-carrier','trip-destination','trip-approval-no','trip-departure-time',
+    'trip-housing-contract-no','trip-bus-stand-time','trip-bus-departure-time',
+    'trip-planned-pilgrim-count','trip-bus-count','trip-notes'
+  ];
+}
+
+function loadTripAdminData(){
+  var today=tripToday();
+  var reportDate=document.getElementById('trip-report-date');
+  if(reportDate && !reportDate.value) reportDate.value=today;
+  fetch('/api/groups').then(function(r){return r.json();}).then(function(d){
+    var sel=document.getElementById('trip-group-id');
+    if(sel && d.ok){
+      sel.innerHTML='<option value="">اختر المجموعة</option>'+d.groups.map(function(g){return '<option value="'+g.id+'">'+g.name+'</option>';}).join('');
+    }
+  }).catch(function(){});
+  refreshTripSelects();
+}
+
+function toggleTripPanel(){
+  var panel=document.getElementById('trip-panel');
+  if(!panel) return;
+  panel.style.display=panel.style.display==='none'?'block':'none';
+  if(panel.style.display!=='none') panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function refreshTripSelects(){
+  var date=tripValue('trip-report-date')||tripToday();
+  fetch('/trips/list?date='+encodeURIComponent(date)).then(function(r){return r.json();}).then(function(d){
+    var trips=d.trips||[];
+    var opts=trips.length
+      ? trips.map(function(t){return '<option value="'+t.id+'">'+t.id+' - '+(t.hotel_name||'')+'</option>';}).join('')
+      : '<option value="">لا توجد رحلات</option>';
+    var assign=document.getElementById('assign-trip-id');
+    if(assign) assign.innerHTML=opts;
+    if(window.renderTripManageListShared){
+      window.renderTripManageListShared({
+        hostId:'trip-manage-list',
+        trips:trips,
+        mode:'admin',
+        emptyText:'لا توجد رحلات لهذا التاريخ',
+        assignSelectId:'assign-trip-id',
+        assignPanelId:'trip-assign-panel'
+      });
+    }else{
+      renderTripManageList(trips);
+    }
+  }).catch(function(){
+    var assign=document.getElementById('assign-trip-id');
+    if(assign) assign.innerHTML='<option value="">لا توجد رحلات</option>';
+    if(window.renderTripManageListShared){
+      window.renderTripManageListShared({
+        hostId:'trip-manage-list',
+        trips:[],
+        mode:'admin',
+        emptyText:'لا توجد رحلات لهذا التاريخ',
+        assignSelectId:'assign-trip-id',
+        assignPanelId:'trip-assign-panel'
+      });
+    }else{
+      renderTripManageList([]);
+    }
+  });
+}
+
+function renderTripManageList(trips){
+  var host=document.getElementById('trip-manage-list');
+  if(!host) return;
+  if(!trips.length){
+    host.innerHTML='<div style="text-align:center;padding:14px;color:var(--tx3)">لا توجد رحلات لهذا التاريخ</div>';
+    return;
+  }
+  host.innerHTML=trips.map(function(t){
+    var status=t.status||'draft';
+    var canUndo=status==='departed';
+    var subtitle=[t.group_name,t.hotel_name,t.departure_time].filter(Boolean).map(tripEscapeHtml).join(' • ');
+    var safeId=String(t.id||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return '<div style="border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:var(--card2,transparent)">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
+        '<div>'+
+          '<div style="font-weight:700">'+tripEscapeHtml(t.id)+'</div>'+
+          '<div style="font-size:12px;color:var(--tx3);margin-top:4px">'+(subtitle||'بدون تفاصيل إضافية')+'</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+
+          '<span style="font-size:12px;padding:4px 10px;border-radius:999px;background:rgba(59,130,246,.12);color:var(--pri,#2563EB)">'+tripEscapeHtml(status)+'</span>'+
+          (canUndo?'<button class="btn" type="button" onclick="undepartTrip(\''+safeId+'\')" style="padding:8px 12px">التراجع عن المغادرة</button>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function undepartTrip(tripId){
+  if(!tripId) return;
+  if(!confirm('هل تريد التراجع عن مغادرة هذه الرحلة؟')) return;
+  fetch('/trips/undepart',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({trip_id:tripId})
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d.ok){
+      alert('تم التراجع عن المغادرة');
+      refreshTripSelects();
+    }else{
+      alert(d.error||'تعذر التراجع عن المغادرة');
+    }
+  }).catch(function(){
+    alert('تعذر التراجع عن المغادرة');
+  });
+}
+
+function createTrip(){
+  var id='TRIP-'+new Date().toISOString().replace(/\D/g,'').slice(0,14);
+  var data=new URLSearchParams();
+  data.append('id',id);
+  data.append('group_id',tripValue('trip-group-id'));
+  data.append('report_date',tripValue('trip-report-date'));
+  data.append('hotel_name',tripValue('trip-hotel-name'));
+  data.append('location_url',tripValue('trip-location-url'));
+  data.append('nationality',tripValue('trip-nationality'));
+  data.append('flight_no',tripValue('trip-flight-no'));
+  data.append('carrier',tripValue('trip-carrier'));
+  data.append('destination',tripValue('trip-destination'));
+  data.append('approval_no',tripValue('trip-approval-no'));
+  data.append('departure_time',tripValue('trip-departure-time'));
+  data.append('housing_contract_no',tripValue('trip-housing-contract-no'));
+  data.append('bus_stand_time',tripValue('trip-bus-stand-time'));
+  data.append('bus_departure_time',tripValue('trip-bus-departure-time'));
+  data.append('planned_pilgrim_count',tripValue('trip-planned-pilgrim-count'));
+  data.append('bus_count',tripValue('trip-bus-count'));
+  data.append('notes',tripValue('trip-notes'));
+  fetch('/trips/create',{
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:data.toString()
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d.ok){
+      alert('تم إنشاء الرحلة');
+      tripFormIds().forEach(function(k){
+        document.getElementById(k).value='';
+      });
+      refreshTripSelects();
+    }else{
+      alert('خطأ');
+    }
+  });
+}
+
+function assignTripPassports(){
+  var tripId=tripValue('assign-trip-id');
+  var raw=tripValue('assign-passports');
+  if(!tripId){alert('اختر الرحلة أولاً');return;}
+  if(!raw.trim()){alert('أدخل أرقام الجوازات');return;}
+  var passports=raw.split(/[\s,;\n\r]+/).filter(Boolean).join(',');
+  var data=new URLSearchParams();
+  data.append('trip_id',tripId);
+  data.append('passports',passports);
+  fetch('/trips/assign',{
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:data.toString()
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d.ok){
+      alert('تم ربط '+d.updated+' جواز');
+      document.getElementById('assign-passports').value='';
+    }else{
+      alert('خطأ');
+    }
+  });
+}
+
+function downloadDailyTripsReport(){
+  var date=tripValue('trip-report-date')||tripToday();
+  var gid=tripValue('trip-group-id');
+  var url='/trips/daily-report?date='+encodeURIComponent(date)+(gid?'&gid='+encodeURIComponent(gid):'');
+  window.location.href=url;
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(loadTripAdminData,500);
+});
+</script>
+<script src="/static/app.js?v=20260429e"></script>
+</body>
+</html>
